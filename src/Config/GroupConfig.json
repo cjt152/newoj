@@ -13,7 +13,7 @@
         "canRepeatJoin":false,
         "roles":[1,2],
         "showInfo":["队员总AC","队员总Rating"],
-        "order":["总AC","总总Rating"]
+        "order":["队员总AC","队员总Rating"]
       },{
         "id":3,
         "name":"创新组",
