@@ -5,6 +5,7 @@ import entity.OJ.BNUOJ.BNUOJ;
 import entity.OJ.CF.CF;
 import entity.OJ.CF.CFGym;
 import entity.OJ.CodeVS.CodeVS;
+import entity.OJ.DistributedJudgeSystem.DistributedJudgeSystem;
 import entity.OJ.FOJ.FOJ;
 import entity.OJ.HDU.HDU;
 import entity.OJ.HUST.HUST;
@@ -33,9 +34,10 @@ public interface Submitter {
             new Acdream(),
             new JudgeSystem("judge_system_game"),
             new CFGym(),
-            new FOJ()
+            new FOJ(),
+            new DistributedJudgeSystem()
     };
-    String oj_keys[]={"hdu","bnuoj","nbut","pku","hust","cf","codevs","judge_system","acdream","judge_system_game","cf_gym","foj"};
+    String oj_keys[]={"hdu","bnuoj","nbut","pku","hust","cf","codevs","judge_system","acdream","judge_system_game","cf_gym","foj","new_judge"};
     //OJ列表。判题OJ顺序不能改变，否则导致已有题目的OJ不正确
     VJudge m=new VJudge();
 

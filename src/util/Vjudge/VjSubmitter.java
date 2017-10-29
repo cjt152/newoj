@@ -143,9 +143,11 @@ public class VjSubmitter implements Runnable{
             }else{
                 ojsrid = nrid;
                 r = oj.getResultReturn(this);
-                Status s = Main.status.setStatusResult(info.rid, r.getR(),r.getTime(),r.getMemory(),r.getCEInfo(),r.getScore());
-                if(r.getR() != Result.ERROR)
-                    Main.submitter.onSubmitDone(s);
+                if(r != null){
+                    Status s = Main.status.setStatusResult(info.rid, r.getR(),r.getTime(),r.getMemory(),r.getCEInfo(),r.getScore());
+                    if(r.getR() != Result.ERROR)
+                        Main.submitter.onSubmitDone(s);
+                }
             }
             this.status=IDLE;
         }catch(Exception e){
