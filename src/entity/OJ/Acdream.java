@@ -12,6 +12,7 @@ import util.HTML.HTML;
 import util.HTML.problemHTML;
 import util.Main;
 import util.MyClient;
+import util.Pair;
 import util.Tool;
 import util.Vjudge.VjSubmitter;
 
@@ -80,20 +81,16 @@ public class Acdream extends OTHOJ{
         login_para.add(new BasicNameValuePair("remember","false"));
         client.Post(URL+"/login",login_para);
 
-        int lang = 2;
         List<NameValuePair> para = new ArrayList<>();
         para.add(new BasicNameValuePair("pid",s.getSubmitInfo().pid));
         para.add(new BasicNameValuePair("code",s.getSubmitInfo().code));
-        if(s.getSubmitInfo().language == 0) lang =  2;
-        else if(s.getSubmitInfo().language == 1) lang =  1;
-        else if(s.getSubmitInfo().language == 2) lang =  3;
-        para.add(new BasicNameValuePair("lang",lang+""));
+        para.add(new BasicNameValuePair("lang",getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
         client.Post(URL+"/submit",para);
         return "success";
     }
 
     private static Map<String,Result> res_map;
-
+    private static List<Pair<Integer,CodeLanguage>> languageList;
     static {
         res_map = new HashMap<>();
         res_map.put("Pending...",Result.PENDING);
@@ -108,6 +105,11 @@ public class Acdream extends OTHOJ{
         res_map.put("Runtime Error",Result.RE);
         res_map.put("Dangerous Code",Result.DANGER);
         res_map.put("System Error",Result.ERROR);
+
+        languageList = new ArrayList<>();
+        languageList.add(new Pair<>(1,CodeLanguage.GPP));
+        languageList.add(new Pair<>(2,CodeLanguage.VCPP));
+        languageList.add(new Pair<>(3,CodeLanguage.JAVA));
     }
 
     private String getCEInfo(VjSubmitter s, String rid){
@@ -152,5 +154,10 @@ public class Acdream extends OTHOJ{
     @Override
     public String get64IO(String pid) {
         return "%lld";
+    }
+
+    @Override
+    public List<Pair<Integer,CodeLanguage>> getLanguageList(String pid) {
+        return languageList;
     }
 }

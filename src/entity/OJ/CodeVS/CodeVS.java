@@ -1,5 +1,6 @@
 package entity.OJ.CodeVS;
 
+import entity.OJ.CodeLanguage;
 import entity.OJ.OTHOJ;
 import entity.RES;
 import entity.Result;
@@ -224,5 +225,15 @@ public class CodeVS extends OTHOJ {
     @Override
     public String get64IO(String pid) {
         return "%lld";
+    }
+
+    private static List<Pair<Integer,CodeLanguage>> languageList;
+    static{
+        languageList = new ArrayList<>();
+        languageList.add(new Pair<>(0,CodeLanguage.GPP));
+    }
+    @Override
+    public List<Pair<Integer, CodeLanguage>> getLanguageList(String pid) {
+        return languageList;
     }
 }

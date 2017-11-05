@@ -24,7 +24,7 @@ class CallBack implements JudgeResultCallback {
     @Override
     public void doWork(String s) {
         //judgeSystem.setResult(s);
-        Tool.debug("结果返回：",s);
+        Tool.log("结果返回："+s);
     }
 }
 public class DistributedJudgeSystem extends JudgeSystem {

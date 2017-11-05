@@ -1,10 +1,12 @@
 package entity.OJ.BNUOJ;
 
+import entity.OJ.CodeLanguage;
 import entity.OJ.OTHOJ;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import util.Main;
+import util.Pair;
 import util.Tool;
 import util.Vjudge.VjSubmitter;
 import entity.RES;
@@ -37,8 +39,9 @@ public class BNUOJ extends OTHOJ {
     private static MyClient hc = MyClient.getMyClient();
 
     private static Map<String,Result> resultMap;
-    private static Map<String,String>  languageMap;
-    public BNUOJ(){
+    //private static Map<String,String>  languageMap;
+    private static List<Pair<Integer,CodeLanguage>> languageList;
+    static{
         resultMap = new HashMap<String, Result>();
 
         resultMap.put("Waiting",Result.PENDING);
@@ -53,10 +56,15 @@ public class BNUOJ extends OTHOJ {
         resultMap.put("Compile Error",Result.CE);
         resultMap.put("Restricted Function",Result.DANGER);
 
-        languageMap=new HashMap<String,String>();
+        /*languageMap=new HashMap<String,String>();
         languageMap.put("0","1");//C++
         languageMap.put("1","2");//C
-        languageMap.put("2","3");//JAVA
+        languageMap.put("2","3");//JAVA*/
+
+        languageList = new ArrayList<>();
+        languageList.add(new Pair<>(1,CodeLanguage.GPP));
+        languageList.add(new Pair<>(2,CodeLanguage.GCC));
+        languageList.add(new Pair<>(3,CodeLanguage.JAVA));
     }
 
     private static String getSubmitURL(){
@@ -74,6 +82,11 @@ public class BNUOJ extends OTHOJ {
     @Override
     public String get64IO(String pid) {
         return getProblemHTML(pid).getInt64();
+    }
+
+    @Override
+    public List<Pair<Integer, CodeLanguage>> getLanguageList(String pid) {
+        return languageList;
     }
 
     public String getProblemURL(String pid){ return URL+problemURL+"?pid="+pid; }
@@ -155,7 +168,7 @@ public class BNUOJ extends OTHOJ {
         if(ret.equals("error")) return "error";
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         formparams.add(new BasicNameValuePair("problem_id",""+s.getSubmitInfo().pid));
-        formparams.add(new BasicNameValuePair("language",languageMap.get(s.getSubmitInfo().language+"")));
+        formparams.add(new BasicNameValuePair("language",getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
         formparams.add(new BasicNameValuePair("source",s.getSubmitInfo().code));
         formparams.add(new BasicNameValuePair("isshare","0"));//share code
         formparams.add(new BasicNameValuePair("user_id",s.getUsername()));

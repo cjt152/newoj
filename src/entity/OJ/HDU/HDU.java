@@ -1,7 +1,9 @@
 package entity.OJ.HDU;
 
+import entity.OJ.CodeLanguage;
 import entity.OJ.OTHOJ;
 import util.Main;
+import util.Pair;
 import util.Tool;
 import util.Vjudge.VjSubmitter;
 import entity.RES;
@@ -36,10 +38,12 @@ public class HDU extends OTHOJ {
     private static String SampleInputSelect="pre";
     private static Map<String,Result> resultMap;
     private static String loginURL="/userloginex.php?action=login";
-    private static Map<String,String>  languageMap;
+    //private static Map<String,String>  languageMap;
     private static String Int64="%I64d";
     private MyClient hc = new MyClient();
-    public HDU(){
+    private static List<Pair<Integer,CodeLanguage>> languageList;
+
+    static{
         resultMap = new HashMap<String, Result>();
         resultMap.put("Queuing",Result.PENDING);
         resultMap.put("Compiling",Result.PENDING);
@@ -62,10 +66,17 @@ public class HDU extends OTHOJ {
         resultMap.put("Compilation Error",Result.CE);
         resultMap.put("System Error",Result.DANGER);
 
-        languageMap=new HashMap<String,String>();
+        /*languageMap=new HashMap<String,String>();
         languageMap.put("0", "0");
         languageMap.put("1", "1");
-        languageMap.put("2", "5");
+        languageMap.put("2", "5");*/
+
+        languageList = new ArrayList<>();
+        languageList.add(new Pair<>(0,CodeLanguage.GPP));
+        languageList.add(new Pair<>(1,CodeLanguage.GCC));
+        languageList.add(new Pair<>(4,CodeLanguage.PASCAL));
+        languageList.add(new Pair<>(5,CodeLanguage.JAVA));
+        languageList.add(new Pair<>(6,CodeLanguage.CSHARP));
     }
 
     private static String getSubmitURL(){
@@ -87,6 +98,11 @@ public class HDU extends OTHOJ {
     @Override
     public String get64IO(String pid) {
         return Int64;
+    }
+
+    @Override
+    public List<Pair<Integer, CodeLanguage>> getLanguageList(String pid) {
+        return languageList;
     }
 
     public String getProblemURL(String pid){ return URL+problemURL+"?pid="+pid; }
@@ -153,7 +169,7 @@ public class HDU extends OTHOJ {
         if(ret.equals("error")) return "error";
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         formparams.add(new BasicNameValuePair("problemid",""+s.getSubmitInfo().pid));
-        formparams.add(new BasicNameValuePair("language",languageMap.get(s.getSubmitInfo().language+"")));
+        formparams.add(new BasicNameValuePair("language",getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
         formparams.add(new BasicNameValuePair("usercode",s.getSubmitInfo().code));
         if(hc.Post(getSubmitURL(), formparams)==null) return "error";
         return "success";

@@ -1,5 +1,6 @@
 package entity.OJ.JudgeSystem;
 
+import entity.OJ.CodeLanguage;
 import entity.OJ.OTHOJ;
 import entity.Problem;
 import entity.RES;
@@ -70,7 +71,7 @@ public class JudgeSystem extends OTHOJ {
         formparams.add(new BasicNameValuePair("timelimit",limit.getKey()+""));
         formparams.add(new BasicNameValuePair("memorylimit",limit.getValue()+""));
         formparams.add(new BasicNameValuePair("code",s.getSubmitInfo().code));
-        formparams.add(new BasicNameValuePair("language",s.getSubmitInfo().language+""));
+        formparams.add(new BasicNameValuePair("language",getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
 
         JSONObject jo = new JSONObject();
         Status st = Main.status.getStatu(s.getSubmitInfo().getRid());
@@ -93,6 +94,7 @@ public class JudgeSystem extends OTHOJ {
         //}
     }
     private static Map<String,Result> resultmap = new HashMap<>();
+    private static List<Pair<Integer,CodeLanguage>> languageList;
     static{
         resultmap.put("AC",Result.AC);
         resultmap.put("TLE",Result.TLE);
@@ -102,6 +104,11 @@ public class JudgeSystem extends OTHOJ {
         resultmap.put("WA",Result.WA);
         resultmap.put("PE",Result.PE);
         resultmap.put("SC",Result.SCORE);
+
+
+        languageList = new ArrayList<>();
+        languageList.add(new Pair<>(0,CodeLanguage.GPP));
+        languageList.add(new Pair<>(3,CodeLanguage.PYTHON3));
     }
 
     /**
@@ -264,6 +271,11 @@ public class JudgeSystem extends OTHOJ {
             }
         }while(!r.canReturn());
         return r;
+    }
+
+    @Override
+    public List<Pair<Integer, CodeLanguage>> getLanguageList(String pid) {
+        return languageList;
     }
 
     @Override

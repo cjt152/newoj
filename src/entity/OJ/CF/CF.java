@@ -1,7 +1,9 @@
 package entity.OJ.CF;
 
+import entity.OJ.CodeLanguage;
 import util.Main;
 import entity.OJ.OTHOJ;
+import util.Pair;
 import util.Tool;
 import util.Vjudge.VjSubmitter;
 import entity.RES;
@@ -101,15 +103,6 @@ public class CF extends OTHOJ {
         return doc.select(".problem-statement").select(".title").get(0).text().substring(3);
     }
 
-    protected String getLanguage(int lang){
-        if(lang==0){//G++
-            return "1";
-        }else if(lang==1){//C
-            return "10";
-        }else if(lang==2){//java
-            return "23";
-        }else return "1";
-    }
     private String get_csrf_token(MyClient hc,int z){
         if(z==1) return hc.get(URL + "/enter").select("#enterForm").select("input").get(0).attr("value");
         else return hc.get(URL + "/problemset/submit").select(".submit-form").select("input").get(0).attr("value");
@@ -145,7 +138,7 @@ public class CF extends OTHOJ {
         formparams.add(new BasicNameValuePair("csrf_token",csrf_token));
         formparams.add(new BasicNameValuePair("action","submitSolutionFormSubmitted"));
         formparams.add(new BasicNameValuePair("submittedProblemCode",s.getSubmitInfo().pid));
-        formparams.add(new BasicNameValuePair("programTypeId",getLanguage(s.getSubmitInfo().language)));
+        formparams.add(new BasicNameValuePair("programTypeId",getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
         formparams.add(new BasicNameValuePair("source",s.getSubmitInfo().code+ getRandomCode()));
         if(hc.Post(URL+"/problemset/submit?csrf_token="+csrf_token, formparams)!=null) return "success";
         return "error";
@@ -203,5 +196,25 @@ public class CF extends OTHOJ {
     @Override
     public String get64IO(String pid) {
         return "%I64d";
+    }
+
+    private static List<Pair<Integer,CodeLanguage>> languageList;
+    static{
+        languageList = new ArrayList<>();
+        languageList.add(new Pair<>(1,CodeLanguage.GPP));
+        languageList.add(new Pair<>(42,CodeLanguage.GPP11));
+        languageList.add(new Pair<>(10,CodeLanguage.GCC));
+        languageList.add(new Pair<>(43,CodeLanguage.GCC11));
+        //languageList.add(new Pair<>(2,CodeLanguage.VCPP));
+        languageList.add(new Pair<>(4,CodeLanguage.PASCAL));
+        languageList.add(new Pair<>(9,CodeLanguage.CSHARP));
+        languageList.add(new Pair<>(32,CodeLanguage.GO1_8));
+        languageList.add(new Pair<>(36,CodeLanguage.JAVA));
+        languageList.add(new Pair<>(31,CodeLanguage.PYTHON3));
+        languageList.add(new Pair<>(34,CodeLanguage.JS));
+    }
+    @Override
+    public List<Pair<Integer, CodeLanguage>> getLanguageList(String pid) {
+        return languageList;
     }
 }

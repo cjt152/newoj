@@ -768,7 +768,7 @@ SET character_set_client = @saved_cs_client;
 
 /*!50003 SET @SAVE_SQL_MODE=@@SQL_MODE*/;
 
-DELIMITER ;;
+DELIMITER ;
 /*!50003 SET SESSION SQL_MODE="NO_AUTO_VALUE_ON_ZERO" */;;
 /*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `tri_user_acnum` AFTER INSERT ON `t_usersolve` FOR EACH ROW UPDATE users SET acnum = (select acnum from v_solved where username=new.username) where username=new.username */;;
 
@@ -1092,4 +1092,3 @@ DROP TABLE IF EXISTS `v_user_`;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-28  4:26:34

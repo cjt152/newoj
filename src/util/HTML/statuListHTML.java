@@ -1,8 +1,10 @@
 package util.HTML;
 
+import com.sun.org.apache.bcel.internal.classfile.Code;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import entity.*;
 import entity.Enmu.UserStarType;
+import entity.OJ.CodeLanguage;
 import servise.ContestMain;
 import servise.UserService;
 import util.HTML.FromHTML.hidden.hidden;
@@ -322,37 +324,47 @@ public class statuListHTML extends pageBean {
     }
     private String LanguageToHtml(Status s){
         int l=s.getLanguage();
+        CodeLanguage language = CodeLanguage.getByID(l);
         int rid=s.getRid();
         if(contest!=null && contest.getType() == Contest_Type.TEAM_OFFICIAL){
             if(s.getUser().equals(teamUser)|| (user!=null&&user.getPermission().getViewCode())){
-                if(l==0)return HTML.a("javascript:viewcode("+rid+")","C++");
+                if(language != null){
+                    return HTML.a("javascript:viewcode("+rid+")",language.getShow());
+                }
+                /*if(l==0)return HTML.a("javascript:viewcode("+rid+")","C++");
                 if(l==1)return HTML.a("javascript:viewcode("+rid+")","C");
                 if(l==2)return HTML.a("javascript:viewcode("+rid+")","JAVA");
-                if(l==3)return HTML.a("javascript:viewcode("+rid+")","Python");
+                if(l==3)return HTML.a("javascript:viewcode("+rid+")","Python");*/
                 return HTML.a("javascript:viewcode("+rid+")","UNKNOW");
             }else{
                 return "-";
             }
         }else if(Main.canViewCode(s, user)){
             if(!incontest){
-                if(l==0)return HTML.a("ViewCode.jsp?rid="+rid,"C++");
+                if(language != null){
+                    return HTML.a("ViewCode.jsp?rid="+rid,language.getShow());
+                }
+                /*if(l==0)return HTML.a("ViewCode.jsp?rid="+rid,"C++");
                 if(l==1)return HTML.a("ViewCode.jsp?rid="+rid,"C");
                 if(l==2)return HTML.a("ViewCode.jsp?rid="+rid,"JAVA");
-                if(l==3)return HTML.a("ViewCode.jsp?rid="+rid,"Python");
+                if(l==3)return HTML.a("ViewCode.jsp?rid="+rid,"Python");*/
                 return HTML.a("ViewCode.jsp?rid="+rid,"UNKNOW");
             }else{
-                if(l==0)return HTML.a("javascript:viewcode("+rid+")","C++");
+                if(language != null){
+                    return HTML.a("javascript:viewcode("+rid+")",language.getShow());
+                }
+                /*if(l==0)return HTML.a("javascript:viewcode("+rid+")","C++");
                 if(l==1)return HTML.a("javascript:viewcode("+rid+")","C");
                 if(l==2)return HTML.a("javascript:viewcode("+rid+")","JAVA");
-                if(l==3)return HTML.a("javascript:viewcode("+rid+")","Python");
+                if(l==3)return HTML.a("javascript:viewcode("+rid+")","Python");*/
                 return HTML.a("javascript:viewcode("+rid+")","UNKNOW");
             }
         }
-        if(l==0)return "C++";
-        if(l==1)return "C";
-        if(l==2)return "JAVA";
-        if(l==3)return "Python";
-        return "UNKNOW";
+        if(language == null){
+            return "UNKNOW";
+        }else{
+            return language.getShow();
+        }
     }
     private String pidToHtml(Status s,boolean in){
         if(!in){

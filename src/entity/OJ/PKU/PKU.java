@@ -1,7 +1,9 @@
 package entity.OJ.PKU;
 
+import entity.OJ.CodeLanguage;
 import entity.OJ.OTHOJ;
 import util.Main;
+import util.Pair;
 import util.Tool;
 import util.Vjudge.VjSubmitter;
 import entity.RES;
@@ -30,7 +32,8 @@ import sun.misc.BASE64Encoder;
 public class PKU extends OTHOJ {
     public static Map<String,Result> ResultMap;
     String url= Main.GV.getJSONObject("pku").getString("URL");
-    public PKU(){
+    private static List<Pair<Integer,CodeLanguage>> languageList;
+    static {
         ResultMap=new HashMap<String, Result>();
         ResultMap.put("Accepted",Result.AC);
         ResultMap.put("Wrong Answer",Result.WA);
@@ -45,6 +48,12 @@ public class PKU extends OTHOJ {
         ResultMap.put("Compiling",Result.JUDGING);
         ResultMap.put("System Error",Result.DANGER);
         ResultMap.put("Validator Error",Result.ERROR);
+
+        languageList = new ArrayList<>();
+        languageList.add(new Pair<>(0,CodeLanguage.GPP));
+        languageList.add(new Pair<>(1,CodeLanguage.GCC));
+        languageList.add(new Pair<>(2,CodeLanguage.JAVA));
+        languageList.add(new Pair<>(3,CodeLanguage.PASCAL));
     }
     public String getName(){
         return "POJ";
@@ -53,6 +62,11 @@ public class PKU extends OTHOJ {
     @Override
     public String get64IO(String pid) {
         return "%lld";
+    }
+
+    @Override
+    public List<Pair<Integer, CodeLanguage>> getLanguageList(String pid) {
+        return languageList;
     }
 
     public String getRid(String user,VjSubmitter ve){
@@ -113,16 +127,6 @@ public class PKU extends OTHOJ {
         }
         return GET_TITLE_ERROR;
     }
-    private String getLanguage(int l){
-        if(l==0){
-            return "0";
-        }if(l==1){
-            return "1";
-        }if(l==2){
-            return "2";
-        }
-        return "0";
-    }
     public String submit(VjSubmitter s){
         MyClient hc=new MyClient();
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
@@ -135,7 +139,7 @@ public class PKU extends OTHOJ {
         //if(hc.Post(url+"/login", formparams)==0) return "error";
         //else {
             List<NameValuePair> formparams1 = new ArrayList<NameValuePair>();
-            formparams1.add(new BasicNameValuePair("language",getLanguage(s.getSubmitInfo().language)));
+            formparams1.add(new BasicNameValuePair("language",getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
             formparams1.add(new BasicNameValuePair("problem_id",s.getSubmitInfo().pid));
 
             String code= new BASE64Encoder().encode(s.getSubmitInfo().code.getBytes());

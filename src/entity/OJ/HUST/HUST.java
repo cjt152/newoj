@@ -1,7 +1,9 @@
 package entity.OJ.HUST;
 
+import entity.OJ.CodeLanguage;
 import entity.OJ.OTHOJ;
 import util.Main;
+import util.Pair;
 import util.Tool;
 import util.Vjudge.VjSubmitter;
 import entity.RES;
@@ -28,8 +30,9 @@ public class HUST extends OTHOJ {
     public static Map<String,Result> ResultMap;
     //status.php?user_id=
     String url= Main.GV.getJSONObject("hust").getString("URL");
-    public HUST(){
-        ResultMap=new HashMap<String, Result>();
+    private static List<Pair<Integer,CodeLanguage>> languageList;
+    static{
+        ResultMap=new HashMap<>();
         ResultMap.put("Accepted",Result.AC);
         ResultMap.put("Wrong Answer",Result.WA);
         ResultMap.put("Presentation Error",Result.PE);
@@ -43,6 +46,12 @@ public class HUST extends OTHOJ {
         ResultMap.put("Compiling",Result.JUDGING);
         ResultMap.put("Pending Rejudge",Result.JUDGING);
 //        ResultMap.put("Validator Error",Result.ERROR);
+
+        languageList = new ArrayList<>();
+        languageList.add(new Pair<>(0,CodeLanguage.GCC));
+        languageList.add(new Pair<>(1,CodeLanguage.GPP));
+        languageList.add(new Pair<>(2,CodeLanguage.PASCAL));
+        languageList.add(new Pair<>(3,CodeLanguage.JAVA));
     }
     public String getName(){
         return "FJUTOJ";
@@ -51,6 +60,11 @@ public class HUST extends OTHOJ {
     @Override
     public String get64IO(String pid) {
         return "%lld";
+    }
+
+    @Override
+    public List<Pair<Integer, CodeLanguage>> getLanguageList(String pid) {
+        return null;
     }
 
     public String getRid(String user,VjSubmitter s){
@@ -125,22 +139,12 @@ public class HUST extends OTHOJ {
 //        System.out.println("password"+s.getPassword());
         hc.Post(url+"/login.php", formparams);
     }
-    private String getLanguage(int l){
-        if(l==0){
-            return "1";
-        }if(l==1){
-            return "0";
-        }if(l==2){
-            return "3";
-        }
-        return "1";
-    }
-    public String submit(VjSubmitter s){
+        public String submit(VjSubmitter s){
         MyClient hc=new MyClient();
         login(hc,s);
 
         List<NameValuePair> formparams1 = new ArrayList<NameValuePair>();
-        formparams1.add(new BasicNameValuePair("language",getLanguage(s.getSubmitInfo().language)));
+        formparams1.add(new BasicNameValuePair("language",getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
         formparams1.add(new BasicNameValuePair("id",s.getSubmitInfo().pid));
 
         //String code= new BASE64Encoder().encode(s.getSubmitInfo().code.getBytes());

@@ -1,5 +1,10 @@
 <%@ page import="entity.User" %>
 <%@ page import="entity.Problem" %>
+<%@ page import="entity.OJ.OTHOJ" %>
+<%@ page import="util.Submitter" %>
+<%@ page import="entity.OJ.CodeLanguage" %>
+<%@ page import="util.Pair" %>
+<%@ page import="java.util.List" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -34,19 +39,28 @@
       <label for="laninput"> language</label><select name="language" class="form-control" id="laninput">
       <%
         Problem p = Main.problems.getProblem(Integer.parseInt(pid));
-        if(p.getOjid() == 9 ) {
-                                        %><option value="0" selected>G++</option><%
-        }else if(p.getOjid() == 7) {
-                                        %><option value="0" selected>G++</option>
-                                          <%--<option value="2">Java</option>--%>
-                                          <option value="3">Python3</option><%
-
-        }else{
+        OTHOJ oj = Submitter.ojs[p.getOjid()];
+        List<Pair<Integer,CodeLanguage>> languageList = oj.getLanguageList(p.getOjspid());
+        for (Pair<Integer, CodeLanguage> aLanguageList : languageList) {
       %>
-                                        <option value="0" selected>G++</option>
-                                        <option value="1">GCC</option>
-                                        <option value="2">Java</option>
-      <%}%>
+      <option value="<%=aLanguageList.getValue().getId()%>"><%=aLanguageList.getValue().getShow()%>
+      </option>
+      <%
+        }
+        %>
+        <%--if(p.getOjid() == 9 ) {--%>
+                                        <%--%><option value="0" selected>G++</option><%--%>
+        <%--}else if(p.getOjid() == 7) {--%>
+                                        <%--%><option value="0" selected>G++</option>--%>
+                                          <%--&lt;%&ndash;<option value="2">Java</option>&ndash;%&gt;--%>
+                                          <%--<option value="3">Python3</option><%--%>
+
+        <%--}else{--%>
+      <%--%>--%>
+                                        <%--<option value="0" selected>G++</option>--%>
+                                        <%--<option value="1">GCC</option>--%>
+                                        <%--<option value="2">Java</option>--%>
+      <%--<%}%>--%>
                                         </select>
     </div>
   </div>

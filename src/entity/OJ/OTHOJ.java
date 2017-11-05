@@ -2,11 +2,15 @@ package entity.OJ;
 
 import entity.Result;
 import util.Main;
+import util.Pair;
 import util.Tool;
 import util.Vjudge.VjSubmitter;
 import entity.RES;
 import util.HTML.problemHTML;
 import util.Submitter;
+
+import java.util.List;
+
 /**
  * 外网OJ基类 （Other OJ）
  * 新增OJ时要在Submitter.ojs类中添加列表
@@ -89,5 +93,17 @@ public abstract class OTHOJ {
             }
         }while(!r.canReturn());
         return r;
+    }
+
+    public abstract List<Pair<Integer,CodeLanguage>> getLanguageList(String pid);
+
+    public int getTrueLanguage(int i,String pid){
+        List<Pair<Integer,CodeLanguage>> languageList = getLanguageList(pid);
+        for(Pair<Integer,CodeLanguage> pair : languageList){
+            if(pair.getValue().getId() == i){
+                return pair.getKey();
+            }
+        }
+        return 0;
     }
 }

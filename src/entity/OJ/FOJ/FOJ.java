@@ -1,5 +1,6 @@
 package entity.OJ.FOJ;
 
+import entity.OJ.CodeLanguage;
 import entity.OJ.OTHOJ;
 import entity.RES;
 import entity.Result;
@@ -13,6 +14,7 @@ import util.HTML.HTML;
 import util.HTML.problemHTML;
 import util.Main;
 import util.MyClient;
+import util.Pair;
 import util.Vjudge.VjSubmitter;
 
 import java.util.ArrayList;
@@ -76,20 +78,18 @@ public class FOJ extends OTHOJ{
         //System.out.println("action = "+action);
         client.Post(URL+"/"+action,login_para);
 
-        int lang = 0;
         List<NameValuePair> para = new ArrayList<>();
         para.add(new BasicNameValuePair("usr",s.getUsername()));
         para.add(new BasicNameValuePair("pid",s.getSubmitInfo().pid));
         para.add(new BasicNameValuePair("code",s.getSubmitInfo().code));
-        if(s.getSubmitInfo().language == 0) lang =  0;
-        else if(s.getSubmitInfo().language == 1) lang =  1;
-        else if(s.getSubmitInfo().language == 2) lang =  3;
-        para.add(new BasicNameValuePair("lang",lang+""));
+
+        para.add(new BasicNameValuePair("lang",getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
         para.add(new BasicNameValuePair("submit","Submit"));
         client.Post(URL+"/submit.php?act=5",para);
         return "success";
     }
     private static Map<String,Result> res_map;
+    private static List<Pair<Integer,CodeLanguage>> languageList;
     static {
         res_map = new HashMap<>();
         res_map.put("Queuing...",Result.PENDING);
@@ -104,6 +104,13 @@ public class FOJ extends OTHOJ{
         res_map.put("Runtime Error",Result.RE);
         res_map.put("Restrict Function Call",Result.DANGER);
         res_map.put("System Error",Result.ERROR);
+
+        languageList = new ArrayList<>();
+        languageList.add(new Pair<>(0,CodeLanguage.GPP));
+        languageList.add(new Pair<>(1,CodeLanguage.GCC));
+        languageList.add(new Pair<>(2,CodeLanguage.PASCAL));
+        languageList.add(new Pair<>(3,CodeLanguage.JAVA));
+        //languageList.add(new Pair<>(4,CodeLanguage.VCPP));
     }
 
 
@@ -150,5 +157,10 @@ public class FOJ extends OTHOJ{
     @Override
     public String get64IO(String pid) {
         return "%I64d";
+    }
+
+    @Override
+    public List<Pair<Integer, CodeLanguage>> getLanguageList(String pid) {
+        return languageList;
     }
 }

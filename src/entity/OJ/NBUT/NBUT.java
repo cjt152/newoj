@@ -1,7 +1,9 @@
 package entity.OJ.NBUT;
 
+import entity.OJ.CodeLanguage;
 import entity.OJ.OTHOJ;
 import util.Main;
+import util.Pair;
 import util.Tool;
 import util.Vjudge.VjSubmitter;
 import entity.RES;
@@ -28,7 +30,9 @@ public class NBUT extends OTHOJ {
     public static Map<String,Result> ResultMap;
     String url= Main.GV.getJSONObject("nbut").getString("URL");
     MyClient hc = MyClient.getMyClient();
-    public NBUT(){
+
+    private static List<Pair<Integer,CodeLanguage>> languageList;
+    static{
         ResultMap=new HashMap<String, Result>();
         ResultMap.put("ACCEPTED",Result.AC);
         ResultMap.put("WRONG_ANSWER",Result.WA);
@@ -44,6 +48,10 @@ public class NBUT extends OTHOJ {
         ResultMap.put("QUEUING",Result.JUDGING);
         ResultMap.put("RUNNING",Result.JUDGING);
         ResultMap.put("COMPILING",Result.JUDGING);
+
+        languageList = new ArrayList<>();
+        languageList.add(new Pair<>(1,CodeLanguage.GCC));
+        languageList.add(new Pair<>(2,CodeLanguage.GPP));
     }
 
     public String getName(){
@@ -53,6 +61,11 @@ public class NBUT extends OTHOJ {
     @Override
     public String get64IO(String pid) {
         return "%I64d";
+    }
+
+    @Override
+    public List<Pair<Integer, CodeLanguage>> getLanguageList(String pid) {
+        return languageList;
     }
 
     public String getRid(String user,VjSubmitter s){
@@ -113,17 +126,6 @@ public class NBUT extends OTHOJ {
         return s.substring(z+21,z+21+32);
     }
 
-    private String getLanguage(int l){
-        if(l==0){
-            return "2";
-        }if(l==1){
-            return "1";
-        }if(l==2){
-            return "0";
-        }
-        return "0";
-    }
-
     public String submit(VjSubmitter s){
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         formparams.add(new BasicNameValuePair("username",s.getUsername()));
@@ -132,7 +134,7 @@ public class NBUT extends OTHOJ {
         if(hc.Post(url+"/User/chklogin.xhtml", formparams)==null) return "error";
         else {
             List<NameValuePair> formparams1 = new ArrayList<NameValuePair>();
-            formparams1.add(new BasicNameValuePair("language",getLanguage(s.getSubmitInfo().language)));
+            formparams1.add(new BasicNameValuePair("language",getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
             formparams1.add(new BasicNameValuePair("id",s.getSubmitInfo().pid));
             formparams1.add(new BasicNameValuePair("code",s.getSubmitInfo().code));
             if(hc.Post(url+"/Problem/submitok.xhtml",formparams1)==null) return "error";
