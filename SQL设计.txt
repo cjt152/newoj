@@ -14,8 +14,7 @@ CREATE TABLE `t_group_member` (
 `status`  int(11) NOT NULL ,
 `join_time`  datetime NOT NULL ,
 PRIMARY KEY (`group_id`, `username`)
-)
-;
+);
 
 
 CREATE TABLE `t_group` (
