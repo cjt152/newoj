@@ -154,9 +154,9 @@ public abstract class Rank<user extends RankBaseUser> {
             }else{
                 row.add("*");
             }
-            if(loginUserName!=null&&us.username.equals(loginUserName)){
-                tableHTML.addCl(rowNumber,1,"info");
-            }
+//            if(loginUserName!=null&&us.username.equals(loginUserName)){
+//                tableHTML.addCl(rowNumber,1,"info");
+//            }
             //row.add(us.showUsername);
             row.add(us.showNick);
             for (String anExtraTableCol : extraTableCol) {
