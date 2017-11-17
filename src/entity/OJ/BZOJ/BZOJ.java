@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class BZOJ extends OTHOJ{
     public static Map<String,Result> ResultMap;
-    public static String URL = "http://www.lydsy.com/JudgeOnline";//Main.GV.getJSONObject("bzoj").getString("URL");
+    public static String URL = Main.GV.getJSONObject("bzoj").getString("URL");//"http://www.lydsy.com/JudgeOnline";
     @Override
     public String getRid(String user, VjSubmitter s) {
         Document d = s.client.get(URL+"/status.php?user_id="+s.getUsername());
@@ -122,8 +122,8 @@ public class BZOJ extends OTHOJ{
         //res_map.put("System Error",Result.ERROR);
 
         languageList = new ArrayList<>();
-        languageList.add(new Pair<>(0,CodeLanguage.GCC));
         languageList.add(new Pair<>(1,CodeLanguage.GPP));
+        languageList.add(new Pair<>(0,CodeLanguage.GCC));
         languageList.add(new Pair<>(2,CodeLanguage.PASCAL));
         languageList.add(new Pair<>(3,CodeLanguage.JAVA));
         languageList.add(new Pair<>(6,CodeLanguage.PYTHON3));
@@ -145,7 +145,7 @@ public class BZOJ extends OTHOJ{
             if(rs == null) res.setR(Result.ERROR);
             else res.setR(rs);
             res.setTime(tds.get(5).text().replace(" ","").replace("ms","MS"));
-            res.setMemory(tds.get(4).text().replace(" ",""));
+            res.setMemory(tds.get(4).text().replace(" ","").replace("kb","KB"));
             if(res.getR()==Result.CE || res.getTime().equals("")) res.setTime("-");
             if(res.getR()==Result.CE || res.getMemory().equals("")) res.setMemory("-");
             if(res.getR()==Result.CE){
