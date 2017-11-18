@@ -37,6 +37,7 @@ public class RatingCase implements IBeanResultSetCreate{
     int rating;
     int ratingnum;
     int rank;
+    int num;
     String text;
 
     public RatingCase(){}
@@ -48,7 +49,7 @@ public class RatingCase implements IBeanResultSetCreate{
         this.rating=rating;
         this.ratingnum=ratingnum;
         this.rank=rank;
-        this.text= cname + " rank:" + rank;
+        this.text= cname + " rank:" + rank + "/"+ num;
     }
 
     @Override
@@ -61,7 +62,8 @@ public class RatingCase implements IBeanResultSetCreate{
         rating=rs.getInt("rating");
         ratingnum=rs.getInt("ratingnum");
         rank=rs.getInt("rank");
-        text=rs.getString("cname")+ " rank:" + rank;
+        num = rs.getInt("num");
+        text=rs.getString("cname")+ " rank:" + rank + "/" + num;
     }
 
     public String getText() {

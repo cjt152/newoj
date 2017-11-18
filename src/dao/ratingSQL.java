@@ -23,7 +23,7 @@ public class ratingSQL {
                 .queryBeanList(RatingCase.class);
     }
     public static List<RatingCase> getRating(String username){
-        return new SQL("SELECT username,time,cid,prating,rating,ratingnum,rank,(select name from contest where id=cid) as cname FROM t_rating WHERE username=? order by ratingnum desc",username)
+        return new SQL("SELECT username,time,cid,prating,rating,ratingnum,rank,(select name from contest where id=cid) as cname,(SELECT COUNT(*) FROM t_rating a where a.cid=b.cid) as num FROM t_rating b WHERE username=? order by ratingnum desc",username)
                 .queryBeanList(RatingCase.class);
     }
     public static String getJson(String username,boolean t){
