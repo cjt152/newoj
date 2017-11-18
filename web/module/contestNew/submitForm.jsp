@@ -3,6 +3,11 @@
 <%@ page import="entity.Problem" %>
 <%@ page import="entity.Contest" %>
 <%@ page import="servise.ContestMain" %>
+<%@ page import="entity.OJ.CodeLanguage" %>
+<%@ page import="util.Submitter" %>
+<%@ page import="util.Pair" %>
+<%@ page import="java.util.List" %>
+<%@ page import="entity.OJ.OTHOJ" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -34,15 +39,15 @@
       <%
         Contest c = ContestMain.getContest(Integer.parseInt(cid));
         Problem p = c.getProblem(Integer.parseInt(pid));
-        if(p.getOjid() == 7 || p.getOjid() == 9 ) {
-      %><option value="0" selected>G++</option><%
-
-    }else{
-    %>
-      <option value="0" selected>G++</option>
-      <option value="1">GCC</option>
-      <option value="2">Java</option>
-      <%}%>
+        OTHOJ oj = Submitter.ojs[p.getOjid()];
+        List<Pair<Integer,CodeLanguage>> languageList = oj.getLanguageList(p.getOjspid());
+        for (Pair<Integer, CodeLanguage> aLanguageList : languageList) {
+          %>
+          <option value="<%=aLanguageList.getValue().getId()%>"><%=aLanguageList.getValue().getShow()%>
+          </option>
+          <%
+        }
+      %>
     </select>
     </div>
   </div>
