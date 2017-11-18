@@ -54,6 +54,13 @@ public class BZOJ extends OTHOJ{
         String limit=d.select("center").text();
         pHTML.setTimeLimit(limit.substring(limit.indexOf("Time Limit:")+12,limit.indexOf("Sec")-1)+"000ms");
         pHTML.setMenoryLimit(limit.substring(limit.indexOf("Memory Limit:")+14,limit.indexOf("MB")-1)+"000KB");
+        if(limit.indexOf("Special Judge") != -1){
+            //System.out.println(limit.indexOf("Special Judge"));
+            pHTML.setSpj(limit.indexOf("Special Judge"));
+        }
+        else{
+            pHTML.setSpj(0);
+        }
         //pHTML.addSample(d.select(".content").get(0).tagName("pre").html(),d.select(".data").get(1).tagName("pre").html());
         //Elements limit = d.select(".center"); System.out.println("test");
        /* String time_limit = d.select(".center").get(2).text();
@@ -74,14 +81,13 @@ public class BZOJ extends OTHOJ{
         return d.select("title").text();
     }
 
-    @Override
     public String submit(VjSubmitter s) {
         MyClient client = s.client;
         if(client == null) return "error";
 
         //Document d = s.client.get(URL+"/login.php");
-      //  String action = "login.php";
-       // System.out.println(action);
+        //  String action = "login.php";
+        // System.out.println(action);
         List<NameValuePair> login_para = new ArrayList<>();
         login_para.add(new BasicNameValuePair("user_id",s.getUsername()));
         login_para.add(new BasicNameValuePair("password",s.getPassword()));
@@ -92,9 +98,9 @@ public class BZOJ extends OTHOJ{
         System.out.println(client.Post(URL+"/login.php",login_para));
 
         List<NameValuePair> para = new ArrayList<>();
-       // para.add(new BasicNameValuePair("usr",s.getUsername()));
-       // para.add(new BasicNameValuePair("pid",s.getSubmitInfo().pid));
-       // para.add(new BasicNameValuePair("code",s.getSubmitInfo().code));
+        // para.add(new BasicNameValuePair("usr",s.getUsername()));
+        // para.add(new BasicNameValuePair("pid",s.getSubmitInfo().pid));
+        // para.add(new BasicNameValuePair("code",s.getSubmitInfo().code));
 
         para.add(new BasicNameValuePair("language",getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
         para.add(new BasicNameValuePair("id",s.getSubmitInfo().pid));
@@ -102,6 +108,7 @@ public class BZOJ extends OTHOJ{
         System.out.println(client.Post(URL+"/submit.php",para));
         return "success";
     }
+
     private static Map<String,Result> res_map;
     private static List<Pair<Integer,CodeLanguage>> languageList;
     static {
