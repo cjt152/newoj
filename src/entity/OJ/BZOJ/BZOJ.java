@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class BZOJ extends OTHOJ{
     public static Map<String,Result> ResultMap;
-    public static String URL = Main.GV.getJSONObject("bzoj").getString("URL");//"http://www.lydsy.com/JudgeOnline";
+    public static String URL = "http://www.lydsy.com/JudgeOnline";//Main.GV.getJSONObject("bzoj").getString("URL");//"http://www.lydsy.com/JudgeOnline";
     @Override
     public String getRid(String user, VjSubmitter s) {
         Document d = s.client.get(URL+"/status.php?user_id="+s.getUsername());
@@ -43,6 +43,14 @@ public class BZOJ extends OTHOJ{
     @Override
     public problemHTML getProblemHTML(String pid) {
         Document d = MyClient.getMyClient().get(getProblemURL(pid));
+        Elements pics = d.select("img");
+        for(int i=0;i<pics.size();i++){
+            String pic_url = pics.get(i).attr("src");
+            if(pic_url.indexOf("http") != 0){
+                pics.get(i).attr("src",URL+"/"+pic_url);
+            }
+        }
+
         problemHTML pHTML = new problemHTML();
         pHTML.setTitle(d.select("title").text());
         Elements ds = d.select(".content");
