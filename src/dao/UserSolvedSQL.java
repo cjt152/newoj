@@ -1,7 +1,7 @@
 package dao;
 
 import entity.UserSolvedListBean;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 
 import java.sql.SQLException;
 import java.util.Map;

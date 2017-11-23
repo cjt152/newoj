@@ -4,7 +4,7 @@ import entity.SomeOptRecord.ESomeOptRecordType;
 import entity.SomeOptRecord.SomeOptRecord;
 import entity.Vote.Vote;
 import util.MyTime;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 import util.Tool;
 
 import java.sql.Timestamp;

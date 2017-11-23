@@ -3,7 +3,7 @@ package util.HTML.problemListHTML.problemListFilterHTML;
 import util.Main;
 import util.HTML.HTML;
 import util.HTML.TableHTML;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

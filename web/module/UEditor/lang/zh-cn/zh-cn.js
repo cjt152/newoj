@@ -122,7 +122,7 @@ UE.I18N['zh-cn'] = {
         'python':'Python',
         'ruby':'Ruby',
         'scala':'Scala',
-        'sql':'SQL',
+        'sql':'sql',
         'vb':'Visual Basic',
         'xml':'XML'
     },

@@ -3,9 +3,8 @@ package dao;
 
 import entity.Enmu.UserStarType;
 import entity.Status;
-import entity.UserStar;
 import entity.UserStarSet;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 
 import java.util.List;
 

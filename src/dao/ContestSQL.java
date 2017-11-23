@@ -6,7 +6,7 @@ import servise.ContestMain;
 import util.Main;
 import servise.MessageMain;
 import util.HTML.HTML;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 import action.addcontest;
 import util.Tool;
 

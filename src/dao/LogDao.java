@@ -1,9 +1,8 @@
 package dao;
 
 import entity.Log;
-import util.Main;
 import util.MyTime;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 import util.TimerTasks.MyTimer;
 import util.Tool;
 

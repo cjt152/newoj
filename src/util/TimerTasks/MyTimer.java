@@ -1,8 +1,7 @@
 package util.TimerTasks;
 
-import dao.LogDao;
 import util.Main;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 
 import java.util.*;
 

@@ -4,12 +4,11 @@ import entity.Discuss.Discuss;
 import entity.Discuss.ReplyReply;
 import entity.Permission;
 import entity.User;
-import servise.DiscussMain;
 import util.Main;
 import entity.Discuss.DiscussReply;
 import servise.MessageMain;
 import util.HTML.HTML;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 import util.Tool;
 
 import java.util.List;

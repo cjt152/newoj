@@ -1,7 +1,7 @@
 package dao;
 
 import entity.exam.*;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package dao.Mall;
 
 import dao.BaseCache;
 import entity.Mall.Order;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 
 import java.util.List;
 

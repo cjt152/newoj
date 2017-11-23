@@ -4,7 +4,7 @@ import entity.Enmu.AcbOrderType;
 import util.Main;
 import entity.ProblemTagRecord;
 import entity.ProblemTag;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

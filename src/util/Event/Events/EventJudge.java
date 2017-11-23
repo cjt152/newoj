@@ -6,8 +6,7 @@ import entity.Status;
 import entity.User;
 import servise.ChallengeMain;
 import util.Event.BaseTitleEvent;
-import util.Main;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 import dao.ChallengeSQL;
 
 import java.sql.Timestamp;

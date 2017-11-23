@@ -1,4 +1,4 @@
-package util.SQL;
+package com.fjutacm.common.sql;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;

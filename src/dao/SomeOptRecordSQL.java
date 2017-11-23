@@ -2,8 +2,7 @@ package dao;
 
 import entity.SomeOptRecord.ESomeOptRecordType;
 import entity.SomeOptRecord.SomeOptRecord;
-import util.SQL.SQL;
-import util.Tool;
+import com.fjutacm.common.sql.SQL;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

@@ -9,7 +9,7 @@ import util.Event.Events.EventStatusChange;
 import util.Main;
 import util.HTML.HTML;
 import util.Pair;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 import util.TimerTasks.TaskUpdateAllUserRank;
 import util.Tool;
 
@@ -344,7 +344,7 @@ public class statusSQL {
         return list;
     }
     public void addCEInfo(int rid, String info){
-        //new SQL("delete from ceinfo where rid=?",rid).update();
+        //new sql("delete from ceinfo where rid=?",rid).update();
 //        if(info.length()>800){
 //            info=info.substring(0,797)+"...";
 //        }

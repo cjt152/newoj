@@ -2,7 +2,7 @@ package util;
 
 import entity.Log;
 import entity.User;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 
 import java.io.*;
 import java.sql.Timestamp;

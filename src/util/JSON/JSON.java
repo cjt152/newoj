@@ -13,10 +13,8 @@ import util.HTML.problemListHTML.problemView;
 import com.google.gson.Gson;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;

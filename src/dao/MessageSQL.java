@@ -1,7 +1,7 @@
 package dao;
 
 import entity.Message;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 import util.Tool;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package util.SQL;
+package com.fjutacm.common.sql;
 
 import entity.IBeanResultSetCreate;
 import util.FileLog;
@@ -45,7 +45,7 @@ public class SQL {
         Timestamp t = Tool.now();
         ResultSet rs = p.executeQuery();
         String sql =p.toString();
-        //Tool.debug("{"+(Tool.now().getTime() - t.getTime()) +"}"+ sql.substring(sql.indexOf(':')+1) , SQL.class.getName());
+        //Tool.debug("{"+(Tool.now().getTime() - t.getTime()) +"}"+ sql.substring(sql.indexOf(':')+1) , sql.class.getName());
         Tool.SQLDebug(Tool.now().getTime() - t.getTime(),sql.substring(sql.indexOf(':')+1));
         return rs;
     }
@@ -256,6 +256,7 @@ public class SQL {
     public int insertGetLastInsertId(){
         p=null;
         try {
+
             p= conn.prepareStatement(sql);
             for(int i=0;i<args.length;i++){
                 p.setObject(i+1,args[i]);
@@ -323,4 +324,5 @@ public class SQL {
             if(log)Tool.log(ignored);
         }
     }
+
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 import entity.RatingCase;
 import util.Main;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 import com.google.gson.Gson;
 
 /**

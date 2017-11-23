@@ -8,14 +8,13 @@ import entity.OJ.OTHOJ;
 import servise.GvMain;
 import util.CodeCompare.cplusplus.CPlusPlusCompare;
 import util.Config.Config;
-import util.Config.TopConfig;
 import util.GlobalVariables.GlobalVariables;
 import util.HTML.problemHTML;
 import action.addLocalProblem;
 import action.addproblem1;
 import net.sf.json.JSONObject;
 import org.apache.struts2.ServletActionContext;
-import util.SQL.SQLUpdateThread;
+import com.fjutacm.common.sql.SQLUpdateThread;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

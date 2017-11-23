@@ -1010,7 +1010,7 @@ DROP TABLE IF EXISTS `v_user_`;
 /*!50001 DROP TABLE `contestusersolve_view`*/;
 /*!50001 DROP VIEW IF EXISTS `contestusersolve_view`*/;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` sql SECURITY DEFINER */
 /*!50001 VIEW `contestusersolve_view` AS select `statu`.`cid` AS `cid`,(select `contestproblems`.`pid` AS `pid` from `contestproblems` where ((`contestproblems`.`cid` = `statu`.`cid`) and (`contestproblems`.`tpid` = `statu`.`pid`))) AS `pid`,`statu`.`ruser` AS `username`,max((`statu`.`result` = 1)) AS `solved` from `statu` where (`statu`.`cid` <> -(1)) group by `statu`.`ruser`,`statu`.`pid`,`statu`.`cid` */;
 
 --
@@ -1020,7 +1020,7 @@ DROP TABLE IF EXISTS `v_user_`;
 /*!50001 DROP TABLE `usersolve_view`*/;
 /*!50001 DROP VIEW IF EXISTS `usersolve_view`*/;
 /*!50001 CREATE ALGORITHM=TEMPTABLE */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` sql SECURITY DEFINER */
 /*!50001 VIEW `usersolve_view` AS select `statu`.`ruser` AS `username`,`statu`.`pid` AS `pid`,max((`statu`.`result` = 1)) AS `solved` from `statu` group by `statu`.`ruser`,`statu`.`pid` */;
 
 --
@@ -1030,7 +1030,7 @@ DROP TABLE IF EXISTS `v_user_`;
 /*!50001 DROP TABLE `v_contestuser`*/;
 /*!50001 DROP VIEW IF EXISTS `v_contestuser`*/;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` sql SECURITY DEFINER */
 /*!50001 VIEW `v_contestuser` AS select `contestuser`.`cid` AS `cid`,`contestuser`.`username` AS `username`,`users`.`nick` AS `nick`,`users`.`rating` AS `rating`,`users`.`ratingnum` AS `ratingnum`,`contestuser`.`statu` AS `statu`,`contestuser`.`time` AS `time`,`users`.`name` AS `name`,`users`.`gender` AS `gender`,`users`.`faculty` AS `faculty`,`users`.`major` AS `major`,`users`.`cla` AS `cla`,`users`.`no` AS `no`,`users`.`phone` AS `phone`,`contestuser`.`info` AS `info` from (`contestuser` left join `users` on((`contestuser`.`username` = `users`.`username`))) */;
 
 --
@@ -1040,7 +1040,7 @@ DROP TABLE IF EXISTS `v_user_`;
 /*!50001 DROP TABLE `v_problem`*/;
 /*!50001 DROP VIEW IF EXISTS `v_problem`*/;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` sql SECURITY DEFINER */
 /*!50001 VIEW `v_problem` AS select `problem`.`pid` AS `pid`,`problem`.`ptype` AS `ptype`,`problem`.`title` AS `title`,`problem`.`ojid` AS `ojid`,`problem`.`ojspid` AS `ojspid`,`problem`.`visiable` AS `visiable`,(select count(`usersolve_view`.`username`) AS `COUNT(username)` from `usersolve_view` where ((`usersolve_view`.`pid` = `problem`.`pid`) and (`usersolve_view`.`solved` = 1))) AS `acusernum`,(select count(`statu`.`id`) AS `COUNT(id)` from `statu` where (`statu`.`pid` = `problem`.`pid`)) AS `submitnum` from `problem` */;
 
 --
@@ -1050,7 +1050,7 @@ DROP TABLE IF EXISTS `v_user_`;
 /*!50001 DROP TABLE `v_problem_tag`*/;
 /*!50001 DROP VIEW IF EXISTS `v_problem_tag`*/;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` sql SECURITY DEFINER */
 /*!50001 VIEW `v_problem_tag` AS select `t_problem_tag_record`.`pid` AS `pid`,`t_problem_tag_record`.`tagid` AS `tagid`,sum((`t_problem_tag_record`.`rating` - 500)) AS `rating` from `t_problem_tag_record` group by `t_problem_tag_record`.`pid`,`t_problem_tag_record`.`tagid` */;
 
 --
@@ -1060,7 +1060,7 @@ DROP TABLE IF EXISTS `v_user_`;
 /*!50001 DROP TABLE `v_solved`*/;
 /*!50001 DROP VIEW IF EXISTS `v_solved`*/;
 /*!50001 CREATE ALGORITHM=TEMPTABLE */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` sql SECURITY DEFINER */
 /*!50001 VIEW `v_solved` AS select `t_usersolve`.`username` AS `username`,sum(`t_usersolve`.`status`) AS `acnum` from `t_usersolve` group by `t_usersolve`.`username` */;
 
 --
@@ -1070,7 +1070,7 @@ DROP TABLE IF EXISTS `v_user_`;
 /*!50001 DROP TABLE `v_user`*/;
 /*!50001 DROP VIEW IF EXISTS `v_user`*/;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` sql SECURITY DEFINER */
 /*!50001 VIEW `v_user` AS select (select count(0) AS `count(0)` from `v_user_` where ((`v_user_`.`showrating` > `a`.`showrating`) or ((`v_user_`.`showrating` = `a`.`showrating`) and (`v_user_`.`acnum` > `a`.`acnum`)))) AS `rank`,`a`.`username` AS `username`,`a`.`password` AS `password`,`a`.`nick` AS `nick`,`a`.`gender` AS `gender`,`a`.`school` AS `school`,`a`.`Email` AS `Email`,`a`.`motto` AS `motto`,`a`.`registertime` AS `registertime`,`a`.`type` AS `type`,`a`.`Mark` AS `Mark`,`a`.`rating` AS `rating`,`a`.`showrating` AS `showrating`,`a`.`ratingnum` AS `ratingnum`,`a`.`acnum` AS `acnum`,`a`.`acb` AS `acb`,`a`.`name` AS `name`,`a`.`faculty` AS `faculty`,`a`.`major` AS `major`,`a`.`cla` AS `cla`,`a`.`no` AS `no`,`a`.`phone` AS `phone`,`a`.`inTeamLv` AS `inTeamLv`,`a`.`inTeamStatus` AS `inTeamStatus` from `v_user_` `a` order by (select count(0) AS `count(0)` from `v_user_` where ((`v_user_`.`showrating` > `a`.`showrating`) or ((`v_user_`.`showrating` = `a`.`showrating`) and (`v_user_`.`acnum` > `a`.`acnum`)))) */;
 
 --
@@ -1080,7 +1080,7 @@ DROP TABLE IF EXISTS `v_user_`;
 /*!50001 DROP TABLE `v_user_`*/;
 /*!50001 DROP VIEW IF EXISTS `v_user_`*/;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` sql SECURITY DEFINER */
 /*!50001 VIEW `v_user_` AS select `a`.`username` AS `username`,`a`.`password` AS `password`,`a`.`nick` AS `nick`,`a`.`gender` AS `gender`,`a`.`school` AS `school`,`a`.`Email` AS `Email`,`a`.`motto` AS `motto`,`a`.`registertime` AS `registertime`,`a`.`type` AS `type`,`a`.`Mark` AS `Mark`,`a`.`rating` AS `rating`,round(((((`a`.`rating` - 700) * (1 - pow(0.6,`a`.`ratingnum`))) + 700) + 0.5),0) AS `showrating`,`a`.`ratingnum` AS `ratingnum`,`a`.`acnum` AS `acnum`,`a`.`acb` AS `acb`,`a`.`name` AS `name`,`a`.`faculty` AS `faculty`,`a`.`major` AS `major`,`a`.`cla` AS `cla`,`a`.`no` AS `no`,`a`.`phone` AS `phone`,`a`.`inTeamLv` AS `inTeamLv`,`a`.`inTeamStatus` AS `inTeamStatus` from `users` `a` */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

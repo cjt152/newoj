@@ -1,25 +1,17 @@
 package util.TimerTasks;
 
 import action.addcontest;
-import action.addproblem1;
 import entity.Contest;
 import entity.Enmu.AcbOrderType;
-import entity.OJ.CodeVS.CodeVS;
 import entity.Result;
 import entity.Status;
-import org.apache.commons.collections.set.SynchronizedSet;
 import servise.ContestMain;
 import servise.GvMain;
 import servise.MessageMain;
 import util.Main;
-import util.SQL.SQL;
-import util.Submitter;
-import util.Tool;
+import com.fjutacm.common.sql.SQL;
 
 import java.util.*;
-
-import static util.Main.GV;
-import static util.Main.status;
 
 /**
  * 每日一题改成每日补一题

@@ -2,14 +2,11 @@ package dao;
 
 import entity.AiInfo;
 import util.JSON.JSON;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import net.sf.json.JSONObject;
-
-import javax.xml.crypto.Data;
 
 /**
  * Created on 2017/8/6.

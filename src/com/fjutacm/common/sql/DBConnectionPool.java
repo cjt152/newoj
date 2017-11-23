@@ -1,4 +1,4 @@
-package util.SQL;
+package com.fjutacm.common.sql;
 
 import util.Main;
 import util.TimerTasks.MyTimer;

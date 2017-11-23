@@ -2,9 +2,8 @@ package dao;
 
 import entity.UserGroup.Group;
 import entity.UserGroup.GroupMember;
-import entity.UserGroup.GroupMemberStatus;
 import entity.UserGroup.GroupType;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 import util.Tool;
 
 import java.util.List;

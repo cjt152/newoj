@@ -11,7 +11,7 @@ import util.Main;
 import servise.MessageMain;
 import util.HTML.HTML;
 import util.MyTime;
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 import util.Tool;
 
 import java.sql.*;
@@ -306,7 +306,7 @@ public class UserSQL extends BaseCache<String,User> {
 
     public List<User> getRegisterUsers(int cid){
         return new SQL("SELECT * FROM users WHERE username in (SELECT username FROM contestuser WHERE cid = ?)",cid).queryBeanList(User.class);
-        /*SQL sql=new SQL("select * from v_contestuser where cid=?",cid);
+        /*sql sql=new sql("select * from v_contestuser where cid=?",cid);
         List<User> list=new ArrayList<User>();
         ResultSet rs=sql.query();
         try {

@@ -1,6 +1,6 @@
 package dao;
 
-import util.SQL.SQL;
+import com.fjutacm.common.sql.SQL;
 
 /**
  * Created by QAQ on 2016/6/26 0026.

@@ -1,8 +1,7 @@
 package dao;
 
 import entity.GameRep;
-import util.SQL.SQL;
-import util.Tool;
+import com.fjutacm.common.sql.SQL;
 
 import java.util.List;
 
