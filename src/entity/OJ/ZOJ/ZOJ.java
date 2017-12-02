@@ -28,15 +28,17 @@ import java.util.Map;
 
 public class ZOJ extends OTHOJ{
     public static Map<String,Result> ResultMap;
-    public static String URL = "http://acm.zju.edu.cn";//Main.GV.getJSONObject("bzoj").getString("URL");//"http://www.lydsy.com/JudgeOnline";
+    public static String URL = Main.GV.getJSONObject("zoj").getString("URL");//"http://acm.zju.edu.cn";
     @Override
     public String getRid(String user, VjSubmitter s) {
         Document d = s.client.get(URL+"/onlinejudge"+"/showRuns.do?contestId=1&handle="+s.getUsername());
-        Element e = d.select(".list").select("tr").get(1);
-        if(e == null){
+
+        Elements e = d.select(".list").select("tr");
+
+        if(e == null || e.size() < 1){
             return "0";
         }else{
-            Elements tds = e.select("td");
+            Elements tds = e.get(1).select("td");
             return tds.get(0).text();
         }
     }
@@ -56,24 +58,28 @@ public class ZOJ extends OTHOJ{
         }
 
         Elements ds = d.select("div#content_body");
-
-        pHTML.setDis(ds.html());
-       // pHTML.setInput(ds.get(1).text());
+        //pHTML.setInput(ds.get(1).text());
         //pHTML.setOutput(ds.get(2).text());
-       // pHTML.addSample(d.select("pre").get(0).text(),d.select("pre").get(1).text());
+        //pHTML.addSample(d.select("pre").get(0).text(),d.select("pre").get(1).text());
 
         String limit=d.select("center").text();
         System.out.println(limit);
-        pHTML.setTimeLimit(limit.substring(limit.indexOf("Time Limit:")+12,limit.indexOf("Seconds")-1)+"000ms");
-        pHTML.setMenoryLimit(limit.substring(limit.indexOf("Memory Limit:")+14,limit.indexOf("KB")-1)+"000KB");
-        if(limit.indexOf("Special Judge") != -1){
-
-            pHTML.setSpj(limit.indexOf("Special Judge"));
-        }
-        else{
+        pHTML.setTimeLimit(limit.substring(limit.indexOf("Time Limit:")+12,limit.indexOf("Seconds")-1)+"000MS");
+        pHTML.setMenoryLimit(limit.substring(limit.indexOf("Memory Limit:")+14,limit.indexOf("KB")-1)+"KB");
+        if(limit.contains("Special Judge")){
+            pHTML.setSpj(1);
+        }else{
             pHTML.setSpj(0);
         }
         pHTML.setInt64(get64IO(null));
+
+        ds.select("center").get(0).remove();
+        ds.select("center").get(0).remove();
+        ds.select("hr").get(0).remove();
+        ds.select("hr").get(0).remove();
+        ds.select("center").last().remove();
+        pHTML.setDis(ds.html());
+
         return pHTML;
     }
 
@@ -158,8 +164,8 @@ public class ZOJ extends OTHOJ{
             //System.out.println(res_str);
             if(rs == null) res.setR(Result.ERROR);
             else res.setR(rs);
-            res.setTime(tds.get(5).text().replace(" ","").replace("ms","MS"));
-            res.setMemory(tds.get(6).text().replace(" ","").replace("kb","KB"));
+            res.setTime(tds.get(5).text()+"MS");
+            res.setMemory(tds.get(6).text()+"KB");
             if(res.getR()==Result.CE || res.getTime().equals("")) res.setTime("-");
             if(res.getR()==Result.CE || res.getMemory().equals("")) res.setMemory("-");
 
@@ -176,12 +182,7 @@ public class ZOJ extends OTHOJ{
         Document d = s.client.get(URL+"/onlinejudge"+"/showRuns.do?contestId=1&handle="+s.getUsername());
         Elements e = d.select(".list").select("tr").get(1).select("td").get(2).select("a");
 
-        //String id = e.attr("href");
-
-
-        d = s.client.get(URL+e.attr("href"));
-
-        return "<pre>" + d.text() + "</pre>";
+        return s.client.getString(URL+e.attr("href"));
     }
 
     @Override

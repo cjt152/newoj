@@ -27,7 +27,8 @@ import java.util.Map;
 
 public class SPOJ extends OTHOJ{
     public static Map<String,Result> ResultMap;
-    public static String URL = "http://www.spoj.com";//Main.GV.getJSONObject("bzoj").getString("URL");//"http://www.lydsy.com/JudgeOnline";
+    public static String URL = "http://www.spoj.com";
+    //Main.GV.getJSONObject("bzoj").getString("URL");//"http://www.spoj.com";
     @Override
     public String getRid(String user, VjSubmitter s) {
 
@@ -38,16 +39,15 @@ public class SPOJ extends OTHOJ{
         login_para.add(new BasicNameValuePair("login_user",s.getUsername()));
         login_para.add(new BasicNameValuePair("password",s.getPassword()));
 
-
         client.Post(URL+"/login",login_para);
 
         Document d = s.client.get(URL+"/status/"+s.getUsername());
-        System.out.println(URL+"/status/"+s.getUsername());
-        Element e = d.select("table.problems.table.newstatus>tbody").select("tr").get(0);
-        if(e == null){
+        //System.out.println(URL+"/status/"+s.getUsername());
+        Elements e = d.select("table.problems.table.newstatus>tbody").select("tr");
+        if(e == null ||e.size()<1){
             return "0";
         }else{
-            Elements tds = e.select("td");
+            Elements tds = e.get(0).select("td");
             return tds.get(0).select("a").text();
         }
     }
@@ -66,20 +66,10 @@ public class SPOJ extends OTHOJ{
         problemHTML pHTML = new problemHTML();
         pHTML.setTitle(d.select("div.prob>h2#problem-name.text-center").text());
         pHTML.setDis(d.select("div.prob>div#problem-body").html());
-       /* Elements ds = d.select("div.prob>div#problem-body>p");
-        pHTML.setDis(ds.get(0).html());
-        pHTML.setInput(ds.get(1).html());
-        pHTML.setOutput(ds.get(2).html());
-
-
-        System.out.println("test"+d.select("div.prob>div#problem-body").html());*/
-       // pHTML.addSample(d.select("div.prob>div#problem-body>pre").html(),"null");
-
 
         Elements ds1 =d.select("table#problem-meta.probleminfo>tbody");
-        pHTML.setTimeLimit(ds1.select("tr").get(2).select("td").get(1).text());
+        pHTML.setTimeLimit(ds1.select("tr").get(2).select("td").get(1).text().replace("s","000MS"));
         pHTML.setMenoryLimit(ds1.select("tr").get(4).select("td").get(1).text());
-
 
         pHTML.setInt64(get64IO(null));
         return pHTML;
@@ -119,10 +109,10 @@ public class SPOJ extends OTHOJ{
         return "success";
     }
 
-    private static Map<String,Result> res_map;
+    //private static Map<String,Result> res_map;
     private static List<Pair<Integer,CodeLanguage>> languageList;
     static {
-        res_map = new HashMap<>();
+        /*res_map = new HashMap<>();
         res_map.put("running.. (0) edit    ideone it",Result.PENDING);
         res_map.put("pending rejudging",Result.RUNNING);
         res_map.put("pending edit    ideone it",Result.RUNNING);
@@ -136,7 +126,7 @@ public class SPOJ extends OTHOJ{
         res_map.put("compiling edit    ideone it",Result.PENDING);
         res_map.put("runtime error (SIGSEGV) edit    ideone it",Result.RE);
         res_map.put("runtime error (NZEC) edit    ideone it",Result.RE);
-
+        */
         //res_map.put("Restrict Function Call",Result.DANGER);
         //res_map.put("System Error",Result.ERROR);
 
@@ -147,7 +137,20 @@ public class SPOJ extends OTHOJ{
         languageList.add(new Pair<>(10,CodeLanguage.JAVA));
         languageList.add(new Pair<>(116,CodeLanguage.PYTHON3));
     }
-
+    private Result getResultFromString(String str) {
+        if(str.contains("running")) return Result.RUNNING;
+        if(str.contains("pending")) return Result.PENDING;
+        if(str.contains("accepted")) return Result.AC;
+        if(str.contains("wrong answer")) return Result.WA;
+        if(str.contains("presentation error")) return Result.PE;
+        if(str.contains("time limit exceeded")) return Result.TLE;
+        if(str.contains("memory limit exceed")) return Result.MLE;
+        if(str.contains("output limit exceed")) return Result.OLE;
+        if(str.contains("compilation error")) return Result.CE;
+        if(str.contains("compiling")) return Result.RUNNING;
+        if(str.contains("runtime error")) return Result.RE;
+        return Result.ERROR;
+    }
 
     @Override
     public RES getResult(VjSubmitter s) {
@@ -163,7 +166,7 @@ public class SPOJ extends OTHOJ{
         client.Post(URL+"/login",login_para);
 
         Document d = s.client.get(URL+"/status/"+s.getUsername());
-        System.out.println(URL+"/status/"+s.getUsername());
+        //System.out.println(URL+"/status/"+s.getUsername());
         Element e = d.select("table.problems.table.newstatus>tbody").select("tr").get(0);
 
         RES res = new RES();
@@ -172,8 +175,8 @@ public class SPOJ extends OTHOJ{
         }else{
             Elements tds = e.select("td");
             String res_str = tds.get(4).text();
-            System.out.println("res_str="+res_str);
-            Result rs = res_map.get(res_str);
+            //System.out.println("res_str="+res_str);
+            Result rs = getResultFromString(res_str);
             if(rs == null) res.setR(Result.ERROR);
             else res.setR(rs);
             res.setTime(tds.get(5).text().replace(" ","").replace("ms","MS"));

@@ -23,6 +23,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document;
 
 import javax.net.ssl.SSLContext;
@@ -30,8 +31,11 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.security.cert.CertificateException;
 import javax.security.cert.X509Certificate;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,30 +109,11 @@ public class MyClient extends DefaultHttpClient{
             HttpResponse hr;
             hr = execute(httppost);
             entity = hr.getEntity();
-            if (entity != null) {
-                //System.out.println("Response content lenght:"  + entity.getContentLength());
-                String content;
-                try {
-                    content = EntityUtils.toString(entity);
-                    //Tool.debug("Response content:" + content);
-
-                    return content;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return null;
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-            return null;
+            return HttpEntityToString(entity);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
-        return null;
     }
 
     /**
@@ -151,15 +136,43 @@ public class MyClient extends DefaultHttpClient{
             HttpResponse hr = execute(httpget);
             entity = hr.getEntity();
             return Jsoup.parse(entity.getContent(), "utf-8", "");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return null;
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-            return null;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public String getString(String URL){
+        HttpEntity entity = null;
+        try {
+            HttpGet httpget = new HttpGet(URL);
+            httpget.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
+            if(header!=null) {
+                for (Pair<String, String> pair : header) {
+                    httpget.setHeader(pair.getKey(), pair.getValue());
+                }
+            }
+            HttpResponse hr = execute(httpget);
+            entity = hr.getEntity();
+            return HttpEntityToString(entity);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private String HttpEntityToString(HttpEntity entity){
+        if (entity != null) {
+            //System.out.println("Response content lenght:"  + entity.getContentLength());
+            String content;
+            try {
+                content = EntityUtils.toString(entity);
+                //Tool.debug("Response content:" + content);
+                return content;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
     }
 }
