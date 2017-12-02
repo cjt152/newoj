@@ -112,7 +112,6 @@
       }
   }
   if(bo){
-
       //刷新限制10秒
       Timestamp nextF5Time = (Timestamp)session.getAttribute("nextF5Time");
       Timestamp now = Tool.now();

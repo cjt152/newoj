@@ -115,6 +115,8 @@ public abstract class pageBean {
         table.addCl(r,c,cls);
     }
 
+    protected String getPageButtonBefore(){return "";}
+
     /**
      * @return 返回翻页按钮组的HTML代码，一般不用重写
      */
@@ -136,6 +138,7 @@ public abstract class pageBean {
             }
         }
         StringBuilder s =new StringBuilder("<div class='btn-toolbar' role='toolbar'>");
+        s.append(getPageButtonBefore());
         s.append("<div class='btn-group' role='group'>");
         if(NowPage==1){
             s.append(btn_disabled(getLinkByPage(1),"<<"));
@@ -198,7 +201,7 @@ public abstract class pageBean {
         }else return Num/everyPageNum+1;
     }
 
-    private String btn(String href, String text){
+    protected String btn(String href, String text){
         return HTML.abtn("sm",href,text,"");
     }
     private String btn_disabled(String href, String text){

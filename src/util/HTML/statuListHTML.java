@@ -384,4 +384,11 @@ public class statuListHTML extends pageBean {
             return HTML.a("#R"+s.getUser(),s.getUser());
         }
     }
+
+    public String getPageButtonBefore(){
+        if(cid==-1) {
+            return "";
+        }
+        return btn("javascript:topage(1)","刷新");
+    }
 }
