@@ -178,7 +178,7 @@ public class ContestSQL extends BaseCache<Integer,Contest> {
         removeCatch(cid);
         return "success";
     }
-    public synchronized Contest getContest(int cid) {
+    public Contest getContest(int cid) {
         return getBeanByKey(cid);
     }
     public int getNewId(){

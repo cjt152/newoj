@@ -18,7 +18,7 @@ public abstract class BaseCache<K,T extends IBeanCanCatch> {
     private LinkedHashMap<K,T> _catch = new LinkedHashMap<>();
     private Lock lock = new ReentrantLock();
 
-    public T getBeanByKey(K key){
+    public synchronized T getBeanByKey(K key){
         T bean = getBeanFromCatch(key);
         if(bean==null){
             bean=getByKeyFromSQL(key);
