@@ -62,7 +62,7 @@ public class problemListHTML {
             List<String> row=new ArrayList<String>();
             if(user!=null){
                 int result=Main.status.submitResult(cid, pid, user.getUsername());
-                Tool.log(cid+"-"+pid+"-"+user.getUsername()+"-"+result);
+                //Tool.log(cid+"-"+pid+"-"+user.getUsername()+"-"+result);
                 if(result==1){
                     row.add(HTML.text("✔","green"));
                 }else if(result==0){

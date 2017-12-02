@@ -26,7 +26,7 @@ public class register extends BaseAction{
         return noRedirect==0?ERROR:NONE;
     }
     public String reg(){
-        Tool.log(" - Register:"+username);
+        //Tool.log(" - Register:"+username);
         if(username==null) return returnError();
         for(int i=0;i<username.length();i++){
             char c=username.charAt(i);

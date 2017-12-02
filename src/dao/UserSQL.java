@@ -21,30 +21,19 @@ import java.util.*;
 /**
  * Created by Administrator on 2015/6/3.
  */
-public class UserSQL extends BaseCache<String,User> {
+public class UserSQL extends BaseCacheLRU<String,User> {
     /*
     * users(username,password,nick,gender,Email,motto,registertime,type,solved,submissions,Mark)
     * permission(id,name)
     * userper(username,perid)
     * */
     public UserSQL(){
-        maxSize = 500;
-        cachTime = 30 * MyTime.MINUTE;
+        super(500);
     }
 
-    public static int getUsersNum(int cid,String serach){
-        SQL sql=new SQL("select count(*) from v_contestuser where cid=? and (username like ? or nick like ?)",cid,"%"+serach+"%","%"+serach+"%");
-        ResultSet rs=sql.query();
-        try {
-            if(rs.next()){
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            sql.close();
-        }
-        return 0;
+    public static int getUsersNum(int cid){
+        return new SQL("select count(*) from v_contestuser where cid=? and (username like ? or nick like ?)",cid)
+                .queryNum();
     }
 
     public static int getUsersNum(int cid,int st){
@@ -82,7 +71,7 @@ public class UserSQL extends BaseCache<String,User> {
                 , u.getType()
                 , HTML.HTMLtoString(u.getMark())
                 , -100000
-                , 0,0,"","","","","","",0,0,0,-1,null).update();
+                , 0,0,"","","","","","",0,0,0,1000000,null).update();
         new SQL("UPDATE users SET rank=(select rank+1 FROM v_user WHERE username=?) WHERE username=?",u.getUsername(),u.getUsername()).update();
         MessageMain.addMessageWelcome(u);
         return 1;
@@ -91,19 +80,19 @@ public class UserSQL extends BaseCache<String,User> {
     public void updateAllUserRank(){
         new SQL("UPDATE users SET rank=(select rank+1 FROM v_user WHERE v_user.username=users.username)").update();
     }
-    public int getRank(String user){
-        SQL sql=new SQL("select rank+1 from v_user where username=?", user);
-        ResultSet rs=sql.query();
-        try {
-            rs.next();
-            return rs.getInt(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            sql.close();
-        }
-        return -1;
-    }
+//    public int getRank(String user){
+//        SQL sql=new SQL("select rank+1 from v_user where username=?", user);
+//        ResultSet rs=sql.query();
+//        try {
+//            rs.next();
+//            return rs.getInt(1);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }finally {
+//            sql.close();
+//        }
+//        return -1;
+//    }
 
     public Permission getPermission(String username){
         if(username==null) return null;
@@ -167,12 +156,12 @@ public class UserSQL extends BaseCache<String,User> {
 
     public void addPer(String user,int per){
         new SQL("INSERT INTO userper values(?,?)",user,per).update();
-        removeCatch(user);
+        remove_catch(user);
     }
 
     public void delPer(String user,int per){
         new SQL("delete from userper where username=? and perid=?",user,per).update();
-        removeCatch(user);
+        remove_catch(user);
     }
 
     public User getUser(String username){return getBeanByKey(username);}
@@ -356,7 +345,7 @@ public class UserSQL extends BaseCache<String,User> {
             return "SystemError";
     }
     public boolean update(User u){
-        Tool.log("Edit:"+u.getUsername());
+        //Tool.log("Edit:"+u.getUsername());
         String sql="UPDATE users set ";
         if(u.getPassword()!=null) sql+="password = md5(?),";
         sql+=" nick = ?,name = ?,gender = ?,school = ?,faculty = ?,major = ?,cla = ?";
@@ -369,7 +358,7 @@ public class UserSQL extends BaseCache<String,User> {
         //Tool.log(sql);
         EventMain.triggerEvent(new EventVerify(u));
         boolean k=(s.update()==1);
-        removeCatch(u.getUsername());
+        remove_catch(u.getUsername());
         return k;
     }
     public int updateByVerify(UserVerifyInfo userVerifyInfo){
@@ -397,7 +386,7 @@ public class UserSQL extends BaseCache<String,User> {
                 userVerifyInfo.faculty,userVerifyInfo.major,userVerifyInfo.cla,userVerifyInfo.no,
                 userVerifyInfo.phone,userVerifyInfo.email,userVerifyInfo.graduationTime,status,inTeamLv,userVerifyInfo.username
         ).update();
-        removeCatch(userVerifyInfo.username);
+        remove_catch(userVerifyInfo.username);
         return ret;
     }
     public TeamMemberAwardInfo getTeamMemberAwardInfo(int id){
@@ -485,7 +474,10 @@ public class UserSQL extends BaseCache<String,User> {
     }
     public int addACB(String user, int num, AcbOrderType orderType,String mark){
         int ret= new SQL("UPDATE users SET acb=acb+? WHERE username=?",num,user).update();
-        removeCatch(user);
+        User u  = getBeanFromCatch(user);
+        if(u!=null){
+            u.setAcb(u.getAcb() + num);
+        }
         AcbOrder acbOrder = new AcbOrder();
         acbOrder.username = user;
         acbOrder.change = num;
@@ -498,8 +490,11 @@ public class UserSQL extends BaseCache<String,User> {
     }
     public int subACB(String user,int num, AcbOrderType orderType,String mark) {
         int ret = new SQL("UPDATE users SET acb=acb-? WHERE username=? AND acb>=?", num, user, num).update();
-        removeCatch(user);
         if(ret != 0) {
+            User u  = getBeanFromCatch(user);
+            if(u!=null){
+                u.setAcb(u.getAcb() - num);
+            }
             AcbOrder acbOrder = new AcbOrder();
             acbOrder.username = user;
             acbOrder.change = -num;
@@ -513,7 +508,7 @@ public class UserSQL extends BaseCache<String,User> {
     }
     public void updateUserAcnum(String username){
         new SQL("UPDATE users SET acnum = (select sum(t_usersolve.status) from t_usersolve where t_usersolve.username=?) where username=?",username,username).update();
-        removeCatch(username);
+        remove_catch(username);
     }
     public void updateAllUserAcnum(){
         new SQL("UPDATE users SET acnum = IFNULL((select sum(t_usersolve.status) from t_usersolve where t_usersolve.username=users.username),0)").update();

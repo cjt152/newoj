@@ -22,12 +22,12 @@ public class MatchServer extends WebSocketServlet {
      * @param text 发送文本
      */
     private static void sendMessage(int cid,String text){
-        Tool.debug("~发送消息：cid="+cid+"&text="+text);
+        //Tool.debug("~发送消息：cid="+cid+"&text="+text);
         try{
             Set<MatchWebSocket> s=Main.sockets.get(cid);
-            Tool.debug("hehe:"+cid+" size:"+s.size());
+            //Tool.debug("hehe:"+cid+" size:"+s.size());
             for(MatchWebSocket mw:s){
-                Tool.debug("hehe:"+mw.username);
+                //Tool.debug("hehe:"+mw.username);
                 mw.send(text);
             }
         }catch(NullPointerException ignored){}

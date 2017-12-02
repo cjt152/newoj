@@ -3,20 +3,22 @@ package util.TimerTasks;
 import servise.MallMain;
 import util.Main;
 import util.MyTime;
+import util.Tool;
 
+import java.sql.Timestamp;
 import java.util.Timer;
 
 /**
  * Created by QAQ on 2016/10/14.
  */
 public class TaskUpdateAllUserRank extends MyTimer {
-    public static boolean updateNextTime = true;
+    public static Timestamp nextUpdateTime = null;
     @Override
     public void run() {
-        if(updateNextTime) {
+        if(nextUpdateTime!=null && Tool.now().after(nextUpdateTime)) {
             Main.users.updateAllUserAcnum();
             Main.users.updateAllUserRank();
-            updateNextTime = false;
+            nextUpdateTime = null;
         }
     }
 

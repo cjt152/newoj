@@ -8,6 +8,7 @@ import util.Event.Events.EventJudge;
 import util.Event.Events.EventStatusChange;
 import util.Main;
 import util.HTML.HTML;
+import util.MyTime;
 import util.Pair;
 import util.SQL.SQL;
 import util.TimerTasks.TaskUpdateAllUserRank;
@@ -246,7 +247,7 @@ public class statusSQL {
                 s.getPid()).update();
         Main.users.updateUserAcnum(s.getUser());
         //此时标记下次要更新用户排名
-        TaskUpdateAllUserRank.updateNextTime = true;
+        TaskUpdateAllUserRank.nextUpdateTime = MyTime.addTimestamp(Tool.now(),MyTime.MINUTE*5);
     }
     public void onStatusAdd(Status s){
         Problem p = Main.problems.getProblem(s.getPid());

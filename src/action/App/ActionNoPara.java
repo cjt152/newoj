@@ -26,7 +26,7 @@ import java.util.List;
 public class ActionNoPara extends BaseAction{
 
     public String getSelfInfo(){
-        Tool.log("getSelfInfo");
+        //Tool.log("getSelfInfo");
         out.print(AppJson.getSelfUserInfo());
         return NONE;
     }

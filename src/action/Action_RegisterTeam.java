@@ -46,7 +46,7 @@ public class Action_RegisterTeam extends BaseAction{
         if(Main.loginUser()==null) return "error";
         Contest contest = ContestMain.getContest(cid);
         if(contest == null) return "error";
-        Tool.log("RegisterTeam");
+        //Tool.log("RegisterTeam");
         RegisterTeam rt = new RegisterTeam();
         rt.setUsername(username);
         //rt.setUsername(Main.loginUser().getUsername());

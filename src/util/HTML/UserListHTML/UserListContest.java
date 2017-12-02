@@ -51,7 +51,7 @@ public class UserListContest extends pageBean {
                 super.addTableHead("用户名", "昵称", "Rating", "状态", "时间");
             }
             list2=Main.users.getUsers(cid, (NowPage - 1) * num, num, "", c.isRegisterShowComplete());
-            RegisterUserNum=UserSQL.getUsersNum(c.getCid(),"");
+            RegisterUserNum=UserSQL.getUsersNum(c.getCid());
             PageNum= getTotalPageNum(RegisterUserNum,Main.config.topConfig.userShowNum);
         }
         if(admin){

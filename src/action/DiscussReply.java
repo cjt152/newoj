@@ -23,7 +23,7 @@ public class DiscussReply extends BaseAction{
     public String dr(){
         try{
             User u=Main.loginUser();
-            Tool.log(u.getUsername()+"回复了id为"+id+"的帖子");
+            //Tool.log(u.getUsername()+"回复了id为"+id+"的帖子");
             MessageMain.discussAt(id,text,true);
             return DiscussSQL.reply(u,id,text);
         }catch(NumberFormatException e){
@@ -34,7 +34,7 @@ public class DiscussReply extends BaseAction{
         return DiscussSQL.hideshow(id,rid);
     }
     public String adminReply(){
-        Tool.log("管理员"+Main.loginUser().getUsername()+"回复了id为"+id+"的回复");
+        //Tool.log("管理员"+Main.loginUser().getUsername()+"回复了id为"+id+"的回复");
         return DiscussSQL.adminReply(id,rid,text);
     }
     public String replyReply(){
