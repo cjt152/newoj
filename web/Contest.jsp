@@ -58,9 +58,6 @@
   /*if(user==null){//未登录跳转
     response.sendRedirect("Login.jsp");
   }else*/
-  //刷新限制10秒
-
-
   if(cid==null){//参数错误
     out.print("Wrong Parameter");
   }else if(password!=null){//提交密码到session
@@ -115,13 +112,15 @@
       }
   }
   if(bo){
+
+      //刷新限制10秒
       Timestamp nextF5Time = (Timestamp)session.getAttribute("nextF5Time");
       Timestamp now = Tool.now();
       if (nextF5Time != null && now.before(nextF5Time)){
           out.print("刷新太频繁、"+(nextF5Time.getTime() - now.getTime())/1000+"秒后重试");
           return ;
       }else{
-          nextF5Time = MyTime.addTimestamp(now, 10*MyTime.SECOND);
+          nextF5Time = MyTime.addTimestamp(now, 5*MyTime.SECOND);
           session.setAttribute("nextF5Time",nextF5Time);
       }
 %>
@@ -130,7 +129,6 @@
         window.location.replace("/Contest.jsp?cid=<%=cid%>#Status");
       }
     </script>
-
       <h2 style="text-align:center"><%=ContestMain.getContest(qcid).getName()%></h2>
         <%//进度条
             long time= Tool.now().getTime()-contest.getBeginDate().getTime();
@@ -160,8 +158,6 @@
       <%--<%@include file="module/contestModule/main.jsp"%>--%>
         <script>var js_cid=<%=cid%>;</script>
         <%@include file="module/contestNew/main.html"%>
-
-
 <%}%>
 </div><jsp:include page="module/foot.jsp"/>
 <div id="modal"></div>
