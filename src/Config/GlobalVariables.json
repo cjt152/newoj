@@ -112,5 +112,28 @@
     "Submitter":[
       ["",""]
     ]
+  },
+  "bzoj":{
+    "URL":"http://www.lydsy.com/JudgeOnline",
+    "Submitter":[
+      ["spsmoj","spsmoj123"],
+      ["spsmoj1","spsmoj123"],
+      ["spsmoj2","spsmoj123"],
+      ["spsmoj3","spsmoj123"]
+    ]
+  },
+  "zoj":{
+    "URL":"http://acm.zju.edu.cn",
+    "Submitter":[
+      ["spsmoj","123456"],
+      ["spsmoj1","123456"],
+      ["spsmoj2","123456"]
+    ]
+  },
+  "spoj":{
+    "URL":"http://www.spoj.com",
+    "Submitter":[
+      ["spsmoj","spsmoj123"]
+    ]
   }
 }

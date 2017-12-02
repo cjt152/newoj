@@ -5,6 +5,9 @@
 <%@ page import="entity.Contest" %>
 <%@ page import="util.Tool" %>
 <%@ page import="servise.ContestMain" %>
+<%@ page import="java.sql.Timestamp" %>
+<%@ page import="util.MyTime" %>
+<%@ page import="javax.rmi.CORBA.Tie" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -55,6 +58,9 @@
   /*if(user==null){//未登录跳转
     response.sendRedirect("Login.jsp");
   }else*/
+  //刷新限制10秒
+
+
   if(cid==null){//参数错误
     out.print("Wrong Parameter");
   }else if(password!=null){//提交密码到session
@@ -109,6 +115,15 @@
       }
   }
   if(bo){
+      Timestamp nextF5Time = (Timestamp)session.getAttribute("nextF5Time");
+      Timestamp now = Tool.now();
+      if (nextF5Time != null && now.before(nextF5Time)){
+          out.print("刷新太频繁、"+(nextF5Time.getTime() - now.getTime())/1000+"秒后重试");
+          return ;
+      }else{
+          nextF5Time = MyTime.addTimestamp(now, 10*MyTime.SECOND);
+          session.setAttribute("nextF5Time",nextF5Time);
+      }
 %>
     <script>
       if(location.pathname=="/sb.action"){
@@ -145,6 +160,8 @@
       <%--<%@include file="module/contestModule/main.jsp"%>--%>
         <script>var js_cid=<%=cid%>;</script>
         <%@include file="module/contestNew/main.html"%>
+
+
 <%}%>
 </div><jsp:include page="module/foot.jsp"/>
 <div id="modal"></div>
