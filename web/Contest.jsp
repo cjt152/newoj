@@ -116,7 +116,7 @@
       Timestamp nextF5Time = (Timestamp)session.getAttribute("nextF5Time");
       Timestamp now = Tool.now();
       if (nextF5Time != null && now.before(nextF5Time)){
-          out.print("刷新太频繁，"+(nextF5Time.getTime() - now.getTime())/1000+"秒后重试<br><br>" +
+          out.print("刷新太频繁，"+((nextF5Time.getTime() - now.getTime())/1000+1)+"秒后重试<br><br>" +
                   "请尽量避免刷新整个网页<br>" +
                   "刷新评测列表请使用评测列表左上角的刷新按钮<br>" +
                   "刷新其他内容可以切换标签页");
