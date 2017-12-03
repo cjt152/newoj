@@ -32,7 +32,7 @@ public class UserSQL extends BaseCacheLRU<String,User> {
     }
 
     public static int getUsersNum(int cid){
-        return new SQL("select count(*) from v_contestuser where cid=? and (username like ? or nick like ?)",cid)
+        return new SQL("select count(*) from v_contestuser where cid=?",cid)
                 .queryNum();
     }
 
