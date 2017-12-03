@@ -30,7 +30,7 @@ public class RankICPC extends Rank<user> {
         list=new ArrayList<user>();
         fb=new ArrayList<String>();
         for(int i=0;i<c.getUserNum();i++){
-            add(c.getUser(i),c,user.class);
+            add(c.getUser(i),c);
         }
     }
 
@@ -65,6 +65,10 @@ public class RankICPC extends Rank<user> {
 
     public void setPenalty(int penalty) {
         this.penalty = penalty;
+    }
+
+    public void add(RegisterUser user,Contest c){
+        add(user,c,user.class);
     }
 
     public void add(Status s,Contest c){

@@ -70,6 +70,7 @@ public abstract class Rank<user extends RankBaseUser> {
         add(s,c);
     }
     protected abstract void add(Status  s,Contest c);//处理rejudge
+    public abstract void add(RegisterUser u, Contest c);
     public _rank get_rank(){
         _rank r=new _rank();
         Collections.sort(list);
@@ -188,15 +189,23 @@ public abstract class Rank<user extends RankBaseUser> {
     }
     public void add(RegisterUser u, Contest c,Class<user> cls){
         user _user = null;
+        boolean isUpdate = false;
         try {
+            for (user aList : list) {
+                if (aList.username.equals(u.getUsername())) {
+                    _user = aList;
+                    isUpdate = true;
+                    break;
+                }
+            }
             if(u.getStatu()==1||u.getStatu() == RegisterUser.STATUS_TEAM_AUTO_APPENDED){//1是正式，2是星号
-                _user = cls.newInstance();
+                if(_user == null) _user = cls.newInstance();
                 _user.init(u.getUsername(),1,c.getProblemNum());
             }else if(u.getStatu()==2){
-                _user = cls.newInstance();
+                if(_user == null) _user = cls.newInstance();
                 _user.init(u.getUsername(),0,c.getProblemNum());
             }else if(u.getStatu()==-1){
-                _user = cls.newInstance();
+                if(_user == null) _user = cls.newInstance();
                 _user.init(u.getUsername(),-1,c.getProblemNum());
             }
             if(_user != null) {
@@ -207,7 +216,7 @@ public abstract class Rank<user extends RankBaseUser> {
                     _user.showUsername = u.getShowUserName();
                     _user.showNick = u.getShowNick();
                 }
-                list.add(_user);
+                if(!isUpdate) list.add(_user);
             }
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();

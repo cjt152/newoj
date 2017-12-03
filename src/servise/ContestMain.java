@@ -55,7 +55,8 @@ public class ContestMain {
         if (c.isRegisterShowComplete() && !u.canRegisterOfficalContest()) {
             return "info";
         }
-        return contests.addUserContest(cid, u.getUsername(), status);
+        return contests.setUserContest(cid,u.getUsername(),status,"");
+        //return contests.addUserContest(cid, u.getUsername(), status);
     }
 
     public static String contestPorblemPublc(int cid) {
@@ -114,7 +115,7 @@ public class ContestMain {
         return contests.getRegisterTeamByCid(cid);
     }
     public static RegisterUser getRegisterStatu(String username, int cid){
-        return contests.getRegisterStatu(username, cid);
+        return contests.getRegisterStatus(username, cid);
     }
     public static void addRegisterTeam(int cid,RegisterTeam rt){
         User user = Main.loginUser();

@@ -243,6 +243,9 @@ public class Contest implements IBeanResultSetCreate, IBeanCanCatch {
         }
         return null;
     }
+    public void AddRegisterUser(RegisterUser user){
+        users.add(user);
+    }
 
     public boolean isRegistered(String username){
         for(RegisterUser registerUser : users){

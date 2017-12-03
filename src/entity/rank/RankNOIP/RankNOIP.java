@@ -22,7 +22,7 @@ public class RankNOIP extends Rank<user> {
         contest = c;
         list=new ArrayList<user>();
         for(int i=0;i<c.getUserNum();i++){
-            add(c.getUser(i),c,user.class);
+            add(c.getUser(i),c);
         }
     }
 
@@ -80,6 +80,11 @@ public class RankNOIP extends Rank<user> {
         }
         us=list.get(i);
         us.add(s,c);
+    }
+
+    @Override
+    public void add(RegisterUser u, Contest c) {
+        add(u,c,user.class);
     }
 
     @Override

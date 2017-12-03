@@ -33,7 +33,7 @@ public class RankTraining extends Rank<user> {
         this.pnum=c.getProblemNum();
 //        List<statu> list=Main.status.getStauts(cid);
         for(int i=0;i<c.getUserNum();i++){
-            add(c.getUser(i),c,user.class);
+            add(c.getUser(i),c);
         }
     }
 
@@ -105,6 +105,11 @@ public class RankTraining extends Rank<user> {
             this.list.get(j).addres(c.getcpid(s.getPid()),s.getResult(),s.getCodelen());
         }
     }//处理rejudge
+
+    @Override
+    public void add(RegisterUser u, Contest c) {
+        add(u,c,user.class);
+    }
 
     @Override
     protected String getCellByPid(int row, user u, int pid) {

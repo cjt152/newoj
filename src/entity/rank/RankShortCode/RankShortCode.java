@@ -1,13 +1,10 @@
 package entity.rank.RankShortCode;
 
+import entity.*;
 import entity.rank.RankBaseUser;
 import util.Main;
-import entity.User;
 import entity.rank.Rank;
 import entity.rank.RankICPC.Form_text_select_inline;
-import entity.Contest;
-import entity.Result;
-import entity.Status;
 import util.HTML.FromHTML.FormHTML;
 import util.HTML.FromHTML.text.text;
 import util.HTML.HTML;
@@ -37,7 +34,7 @@ public class RankShortCode extends Rank<user> {
         this.pnum=c.getProblemNum();
 //        List<statu> list=Main.status.getStauts(cid);
         for(int i=0;i<c.getUserNum();i++){
-            add(c.getUser(i),c,user.class);
+            add(c.getUser(i),c);
         }
 //        for (statu s : list) {
 //            add(s, c);
@@ -154,6 +151,11 @@ public class RankShortCode extends Rank<user> {
             this.list.get(j).addres(c.getcpid(s.getPid()),s.getResult(),s.getCodelen());
         }
     }//处理rejudge
+
+    @Override
+    public void add(RegisterUser u, Contest c) {
+        add(u,c,user.class);
+    }
 
     public String getRuleHTML(){
         return "短码赛规则：顾名思义就是使你的代码尽可能的短。<br>"+
