@@ -19,7 +19,7 @@ public class ratingSQL {
         Main.users.remove_catch(r.getUsername());
     }
     public static List<RatingCase> getRating(int cid){
-        return new SQL("SELECT username,time,cid,prating,rating,ratingnum,rank,(select name from contest where id=cid) as cname FROM t_rating WHERE cid=? order by rank",cid)
+        return new SQL("SELECT username,time,cid,prating,rating,ratingnum,rank,(select name from contest where id=cid) as cname,0 as num FROM t_rating WHERE cid=? order by rank",cid)
                 .queryBeanList(RatingCase.class);
     }
     public static List<RatingCase> getRating(String username){
