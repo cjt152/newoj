@@ -97,10 +97,12 @@ public class UserSQL extends BaseCacheLRU<String,User> {
     public Permission getPermission(String username){
         if(username==null) return null;
         SQL sql=new SQL("select perid from userper where username=?",username);
-        ResultSet rs=sql.query();
-        Permission p=new Permission(rs);
-        sql.close();
-        return p;
+        try {
+            ResultSet rs=sql.query();
+            return new Permission(rs);
+        }finally {
+            sql.close();
+        }
     }
     public TitleSet getTitle(String username){
         if(username == null) return null;
@@ -322,18 +324,16 @@ public class UserSQL extends BaseCacheLRU<String,User> {
 
     public String login(String user,String pass){
         SQL sql=new SQL("select username,password from users where username=? and password=md5(?)", user, pass);
+        SQL sql2=new SQL("select * from users where username=?", user);
         try {
             ResultSet r=sql.query();
             if(r.next()){
                 return "LoginSuccess";
             }else{
-                SQL sql2=new SQL("select * from users where username=?", user);
                 ResultSet rs=sql2.query();
                 if(rs.next()){
-                    sql2.close();
                     return "WrongPassword";
                 }else{
-                    sql2.close();
                     return "NoSuchUser";
                 }
             }
@@ -341,6 +341,7 @@ public class UserSQL extends BaseCacheLRU<String,User> {
             e.printStackTrace();
         }finally {
             sql.close();
+            sql2.close();
         }
             return "SystemError";
     }

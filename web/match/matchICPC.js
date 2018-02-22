@@ -128,6 +128,49 @@ var matchICPC=function(cid){
         ii=0;
         rank_reproduce_er=setInterval("match.rank_reproduce_every()",rankDynameick.dyTime);
     }
+    function rank_download() {
+        var content = "";
+        content += "\""+"排名\",";
+        content += "\""+"用户名\",";
+        content += "\""+"昵称\",";
+        content += "\""+"姓名\",";
+        content += "\""+"性别\",";
+        content += "\""+"学校\",";
+        content += "\""+"学院\",";
+        content += "\""+"专业\",";
+        content += "\""+"班级\",";
+        content += "\""+"学号\",";
+        content += "\""+"S\",";
+        content += "\""+"T\",";
+        content += "\r\n";
+        for(var i=0;i<rank.length;i++)
+        {
+            var data = rank[i];
+            var user=null;
+            if(typeof(userInfo[data.username])=="object")
+                user=userInfo[data.username];
+            else{
+                user=null;
+            }
+            if(user===null){
+                user={nick:"",name:"",gender:"",school:"",faculty:"",major:"",cla:"",no:""};
+            }
+            content += "\""+data.rank + "\",";
+            content += "\""+data.username + "\",";
+            content += "\""+user.nick + "\",";
+            content += "\""+user.name + "\",";
+            content += "\""+user.gender + "\",";
+            content += "\""+user.school + "\",";
+            content += "\""+user.faculty + "\",";
+            content += "\""+user.major + "\",";
+            content += "\""+user.cla + "\",";
+            content += "\""+user.no + "\",";
+            content += "\""+data.S + "\",";
+            content += "\""+parseInt(data.W/60) + "\",";
+            content += "\r\n";
+        }
+        createAndDownloadFile(contestName+".csv",content);
+    }
     function rank_reproduce_every(){
         if(ii>=status.length){
             clearInterval(rank_reproduce_er);
@@ -254,10 +297,21 @@ var matchICPC=function(cid){
             //$main.append("<div class='row'>"+rank[i].username+"["+rank[i].S+"]"+"["+rank[i].W+"]"+"</div>");
         }
     }
+
     return {
         send:send,
         refresh:refresh,
         rank_reproduce:rank_reproduce,
-        rank_reproduce_every:rank_reproduce_every
+        rank_reproduce_every:rank_reproduce_every,
+        rank_download:rank_download
     }
 };
+
+function createAndDownloadFile(fileName, content) {
+    var aTag = document.createElement('a');
+    var blob = new Blob([content]);
+    aTag.download = fileName;
+    aTag.href = URL.createObjectURL(blob);
+    aTag.click();
+    URL.revokeObjectURL(blob);
+}

@@ -52,7 +52,10 @@ var rankDynameick=function(){
         });
         $("#rank-reproduce").click(function(){
             match.rank_reproduce();
-        })
+        });
+        $("#rank-download").click(function () {
+            match.rank_download();
+        });
     }
     init();
     function buildHead(pnum,head){

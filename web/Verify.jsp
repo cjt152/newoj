@@ -192,8 +192,8 @@
                 no:{
                     required: true,
                     number:true,
-                    minlength: 10,
-                    maxlength: 10
+                    minlength: 5,
+                    maxlength: 15
                 },
                 cla:{
                     required: true,
@@ -226,7 +226,7 @@
                 major_text: "专业长度必须是2~15",
                 email: "请输入一个合法的email地址",
                 phone:"请输入一个合法的11位电话号码",
-                no:"请输入一个合法的学号(10位数字)",
+                no:"请输入一个合法的学号(5~15位数字)",
                 cla:"请输入合法的班级号（4位数字）"
             }
         });

@@ -1,11 +1,14 @@
 package WebSocket;
 
+import entity.Contest;
+import entity.RegisterUser;
 import entity.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.commons.lang.NullArgumentException;
+import servise.ContestMain;
 import util.Main;
 import util.Tool;
 
@@ -73,12 +76,15 @@ public class MatchServer extends WebSocketServlet {
      */
     public static void sendRegisterUserInfo(int cid,MatchWebSocket mws){
         List<User> list=Main.users.getRegisterUsers(cid);
+        Contest c = ContestMain.getContest(cid);
+
         JSONObject jo=new JSONObject();
         jo.put("type","RegisterUserInfo");
         JSONObject ja=new JSONObject();
         for (User aList : list) {
             JSONObject user = new JSONObject();
             User u = aList;
+            RegisterUser registerUser = c.getRegisterUser(u.getUsername());
             user.put("nick", u.getNick());
             user.put("name", u.getName());
             user.put("gender", u.getGender());
@@ -87,6 +93,7 @@ public class MatchServer extends WebSocketServlet {
             user.put("major", u.getMajor());
             user.put("cla", u.getCla());
             user.put("no", u.getNo());
+            user.put("status", registerUser.getStatu());
             ja.put(u.getUsername(), user);
         }
         jo.put("data",ja);

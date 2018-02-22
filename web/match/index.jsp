@@ -42,7 +42,8 @@
     <input type="checkbox" id="setting-no"/> 学号<br>
     <input type="button" id="setting-submit" value="确定"/><br>
     <input type="button" id="setting-autowidth" value="自动调整表格宽度"/><br>
-    <input type="button" id="rank-reproduce" value="排行榜重现"/>
+    <input type="button" id="rank-reproduce" value="排行榜重现"/><br>
+    <input type="button" id="rank-download" value="导出CSV文件"/>
 </div>
 <div class="setting-switch close">Setting</div>
 
@@ -63,6 +64,7 @@
 <script src="matchICPC.js"></script>
 <script>
     var match;
+    var contestName = "<%=c.getName()%>";
 </script>
 <script src="rankDynamic.js"></script>
 <script>
