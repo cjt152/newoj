@@ -1,6 +1,7 @@
 package util.Vjudge;
 
 import entity.Status;
+import util.HTML.HTML;
 import util.Main;
 import entity.OJ.OTHOJ;
 import entity.RES;
@@ -10,6 +11,7 @@ import util.Submitter;
 import util.Tool;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ import java.util.List;
 public class VjSubmitter implements Runnable{
     public static final int BUSY=1;
     public static final int IDLE=0;
-    public String showstatus="";
+    public LinkedList<String> showstatus;
     public String rid = "";
     public MyClient client = new MyClient(); //用这个网络客户端进行登录、提交等操作
     public SubmitInfo info;//正在处理的info
@@ -39,6 +41,8 @@ public class VjSubmitter implements Runnable{
         status=IDLE;
         submitterID=id;
         this.vj=vj;
+        showstatus = new LinkedList<>();
+        showstatus.addLast("Begin");
     }
 
     public SubmitInfo getSubmitInfo(){return info;}
@@ -46,6 +50,8 @@ public class VjSubmitter implements Runnable{
     public int getOjid() {
         return ojid;
     }
+
+    public int getID(){return submitterID;}
 
     public boolean isBusy(){
         return status==BUSY;
@@ -62,7 +68,10 @@ public class VjSubmitter implements Runnable{
     public String getOjsrid(){return ojsrid;}
 
     public void setShowstatus(String status){
-        this.showstatus=status;
+        this.showstatus.addLast("["+Tool.now()+"]"+status);
+        if(this.showstatus.size()>30){
+            this.showstatus.removeFirst();
+        }
     }
 
     public void run(){//开始执行线程
@@ -161,7 +170,7 @@ public class VjSubmitter implements Runnable{
     public List<String> row(){
         //submitterID,ojid,status,username,info.rid,info.pid,ojsrid,show
         List<String> row=new ArrayList<String>();
-        row.add(submitterID+"");
+        row.add(HTML.a("admin.jsp?page=SubmitterInfo&id="+submitterID,submitterID+""));
         if(submitterID == -1) row.add("local");
         else row.add(Submitter.ojs[ojid].getName());
         row.add(selfThread.getId()+"");
@@ -170,7 +179,7 @@ public class VjSubmitter implements Runnable{
         row.add(info==null?"":info.rid+"");
         row.add(info==null?"":info.pid+"");
         row.add(ojsrid+"");
-        row.add(showstatus);
+        row.add(showstatus.getLast());
         return row;
     }
     void setSelfThread(Thread selfThread) {

@@ -382,12 +382,12 @@ public class LocalJudge {
             return res;
         }
         int ret=-1;
-        s.showstatus="Compile";
+        s.showstatus.addLast("Compile");
         delFile(outPath + s.getSubmitInfo().rid+"\\");
         if(compile(s,res)){
-            s.showstatus="CompileSuccess";
+            s.showstatus.addLast("CompileSuccess");
             try {
-                s.showstatus="Running";
+                s.showstatus.addLast("Running");
                 if(Main.problems.getProblem(Integer.parseInt(s.getSubmitInfo().pid)).isSpj()){
 
 //                    Tool.debug("LocalJudge SPJ");
@@ -397,7 +397,7 @@ public class LocalJudge {
                     ret=run(s,res);
                 }
 
-                s.showstatus="runDone";
+                s.showstatus.addLast("runDone");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -415,7 +415,7 @@ public class LocalJudge {
             }
             if(Main.config.topConfig.delRun) delFile(outPath + s.getSubmitInfo().rid+"\\");
         }
-        s.showstatus="res="+res.getR();
+        s.showstatus.addLast("res="+res.getR());
         return res;
     }
 }

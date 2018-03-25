@@ -16,7 +16,7 @@ public class SubmitterLocal extends VjSubmitter {
     }
 
     public void go() {
-        showstatus="go";
+        showstatus.addLast("go");
 //        Tool.debug("==2==");
         RES res= LocalJudge.judge(this);
 //        Tool.debug("==3==");

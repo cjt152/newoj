@@ -1533,14 +1533,33 @@ public class HTML {
         return ProblemTagHTML.problemTag();
     }
     public static String adminSubmitterInfo(){
-        TableHTML table=new TableHTML();
-        table.setClass("table");
-        //submitterID,ojid,status,username,info.rid,info.pid,ojsrid,show
-        table.addColname("id","oj","thd","s","username","rid","pid","ojsrid","show");
-        for(VjSubmitter s:Main.submitter.m.getSubmitters()){
-            table.addRow(s.row());
+        int id;
+        try{
+            id=Integer.parseInt(Main.getRequest().getParameter("id"));
+        }catch(NumberFormatException e){
+            id=-1;
         }
-        return table.HTML();
+        if(id==-1){
+            TableHTML table=new TableHTML();
+            table.setClass("table");
+            //submitterID,ojid,status,username,info.rid,info.pid,ojsrid,show
+            table.addColname("id","oj","thd","s","username","rid","pid","ojsrid","show");
+            for(VjSubmitter s:Main.submitter.m.getSubmitters()){
+                table.addRow(s.row());
+            }
+            return table.HTML();
+        } else {
+            for(VjSubmitter vjSubmitter:Main.submitter.m.getSubmitters()){
+                if(vjSubmitter.getID() == id){
+                    StringBuilder sb = new StringBuilder();
+                    for(String ss : vjSubmitter.showstatus){
+                        sb.append(ss).append("<br>");
+                    }
+                    return sb.toString();
+                }
+            }
+        }
+        return "";
     }
     public static String adminPermission(){
         TableHTML table=new TableHTML();
