@@ -6,6 +6,8 @@ import servise.ContestMain;
 import util.Event.EventMain;
 import util.Event.Events.EventJudge;
 import util.Event.Events.EventStatusChange;
+import util.ListCatch.Checker;
+import util.ListCatch.ListCatch;
 import util.Main;
 import util.HTML.HTML;
 import util.MyTime;
@@ -21,6 +23,8 @@ import java.util.*;
  * Created by Administrator on 2015/5/23.
  */
 public class statusSQL {
+    private ListCatch<Status> listCatch;
+    private int MaxListCatchSize = 10000;
     /**
     * statu(id,ruser,pid,cid,lang,submitTime,result,timeUsed,memoryUsed,code)
     * ceinfo(rid,info)
@@ -28,7 +32,21 @@ public class statusSQL {
     private int maxRID;
     public void init(){
         maxRID=getNewRid();
-        //status = new ArrayList<statu>();
+        List<Status> initStatus = new SQL("SELECT * FROM statu WHERE id >="+(maxRID-MaxListCatchSize)+"ORDER BY id").queryBeanList(Status.class);
+        listCatch = new ListCatch<>(MaxListCatchSize,maxRID-MaxListCatchSize);
+        int k = 0;
+        for(int i=maxRID-MaxListCatchSize;i<maxRID;i++){
+            if(k>=initStatus.size()) {
+                listCatch.pushBack(null);
+            }
+            Status s = initStatus.get(k);
+            if(s.getRid() == i){
+                listCatch.pushBack(s);
+                k++;
+            }else{
+                listCatch.pushBack(null);
+            }
+        }
     }
     private int getNewRid(){
         return new SQL("select MAX(id) from statu").queryNum();
@@ -36,6 +54,8 @@ public class statusSQL {
     public synchronized int addStatu(Status s){
         int rid=maxRID+1;
         maxRID++;
+        s.setRid(rid);
+        listCatch.pushBack(s);
         new SQL("insert into statu values(?,?,?,?,?,?,?,?,?,?,?,?)"
                 ,rid
                 ,s.getUser()
@@ -52,6 +72,9 @@ public class statusSQL {
         return rid;
     }
     public Status getStatu(int rid){
+        if(listCatch.getMinID()<=rid&&rid<=listCatch.getMaxID()){
+            return listCatch.get(rid);
+        }
         SQL sql=new SQL("select id,ruser,pid,cid,lang,submittime,result,score,timeUsed,memoryUsed,code,codelen from statu where id=?",rid);
         ResultSet r=sql.query();
         Status s=null;
@@ -97,8 +120,31 @@ public class statusSQL {
         sql+=" ORDER BY id DESC";
         return new SQL(sql,cid,cid).queryNum();
     }
-    public List<Status> getStatus(int cid,int from,int num,
-                     /*筛选信息：*/int pid,int result,int Language,String ssuser,boolean all){
+    public List<Status> getStatus(final int cid, int from, int num,
+                     /*筛选信息：*/final int pid, final int result, final int Language, final String ssuser, final boolean all){
+        List<Status> ret = listCatch.get(from, num, new Checker<Status>() {
+            @Override
+            public boolean check(Status data) {
+                if(data == null) return false;
+                boolean ret = (!all && (cid == data.getCid()));
+                if(!ret) return false;
+                if(pid!=-1){
+                    if(cid!=-1){
+                        ret = (ContestMain.getContest(cid).getGlobalPid(pid) == data.getPid());
+                    }else{
+                        ret = (pid == data.getPid());
+                    }
+                }
+                if(!ret) return false;
+                return     ((result != -1) && result == data.getResult().getValue())
+                        && (Language != -1 && Language == data.getLanguage())
+                        && (ssuser != null && ssuser.length() != 0 && ssuser.equals(data.getUser()));
+            }
+        });
+        if(ret.size()==num){
+            return ret;
+        }
+
         List<Status> l=new ArrayList<Status>();
         PreparedStatement p= null;
         SQL sql1;
@@ -207,10 +253,13 @@ public class statusSQL {
     }
     public synchronized Status setStatusResult (int rid, Result res, String time, String Meory, String CEinfo,int score){
         Status ps = getStatu(rid);
+        Status clone = ps.clone();
+        ps.setStatusResult(res,time,Meory);
+        ps.setScore(score);
         new SQL("update statu set result=?,timeUsed=?,memoryUsed=?,score=? where id=?", Status.resultToInt(res),time,Meory,score,rid).update();
         Tool.log(rid+"->"+res);
         Status s=getStatu(rid);
-        EventMain.triggerEvent(new EventStatusChange(ps,s));
+        EventMain.triggerEvent(new EventStatusChange(clone,s));
         EventMain.triggerEvent(new EventJudge(Main.users.getUser(s.getUser()),s));
         if(s.getCid()!=-1&&res!=Result.JUDGING){
             Contest c=ContestMain.getContest(s.getCid());

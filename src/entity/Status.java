@@ -106,10 +106,10 @@ public class Status implements IBeanResultSetCreate , ICanToJSON{
         result=res;
         TimeUsed=time;
         MemoryUsed=Memory;
-        if(cid!=-1){
-            Contest c= ContestMain.getContest(cid);
-            c.getRank()._add(Main.status.getStatu(rid),c);//通知更新排行榜
-        }
+//        if(cid!=-1){
+//            Contest c= ContestMain.getContest(cid);
+//            c.getRank()._add(Main.status.getStatu(rid),c);//通知更新排行榜
+//        }
     }
 
     public int getCid(){
@@ -202,5 +202,14 @@ public class Status implements IBeanResultSetCreate , ICanToJSON{
         jo.put("memoryUsed",MemoryUsed);
         jo.put("codeLength",codelen);
         return jo;
+    }
+
+    @Override
+    public Status clone() {
+        try{
+            return (Status)super.clone();
+        }catch (CloneNotSupportedException e){
+            return null;
+        }
     }
 }
