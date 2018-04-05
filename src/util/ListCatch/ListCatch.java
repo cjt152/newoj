@@ -6,9 +6,9 @@ import java.util.ArrayList;
 public class ListCatch<T> {
     /**
      * @author 3151301111
-     * @date 2018/3/23 15:12
-     * @version v3.1
-     * 		 增加了一个线性查找功能List<T> get(int from, int num,Checker<T> checker)
+     * @date 2018/4/4 16:57
+     * @version v3.2
+     * 		  修改:线性查找函数get(int from, int num,Checker<T> checker)的查找方向变为降序
      * @var loopArray 循环数组
      * @var max_size 循环数组的容量
      * @var endID 当前最小ID
@@ -68,57 +68,62 @@ public class ListCatch<T> {
         return endID - beginID;
     }
     /**
-     * 获得指定区间的数据，区间内的越界id会被忽略
+     * 从指定位置开始检索，直至到begin或者找到num个符合要求的数据。
      * 强制类型转换未加检测!!!
-     * @param from 区间左端点
-     * @param num 区间的大小
-     * @return  id介于[from,from+num)的数据
+     * @param from 从第from+1个数据开始按id降序查找
+     * @param num 需要的符合要求的数据数量
+     * @return 满足条件的数据列表
      */
     @SuppressWarnings("unchecked")
     public List<T> get(int from, int num) {
-        List<T> resultList = new ArrayList<T>(num);
-        if (from < endID&&from+num>beginID) {//判断是否有交集
-            int end = Math.min(from + num, endID) ;
-            int index = Math.max(from, beginID) ;
-            int i=index%max_size;
-            while(index!=end)
-            {
-                resultList.add((T) loopArray[i]);
-                ++index;
-                ++i;
-                if(i>=max_size)
-                    i=0;
+        return get(from, num, new Checker<T>() {
+            @Override
+            public boolean check(T data) {
+                return true;
             }
-        }
-        return resultList;
+        });
     }
     /**
-     * 从指定位置开始检索，直至到end或者找到num个符合要求的数据。
+     * 从指定位置开始检索，直至到begin或者找到num个符合要求的数据。
      * 强制类型转换未加检测!!!
-     * @param from 检测的起点
+     * @param from 从第from+1个满足条件的数据开始按id降序查找
      * @param num 需要的符合要求的数据数量
-     * @return  id介于[from,xxx]内且符合要求的数据
+     * @param checker 检测方法
+     * @return 满足条件的数据列表
      */
     @SuppressWarnings("unchecked")
     public List<T> get(int from, int num,Checker<T> checker) {
         List<T> resultList = new ArrayList<T>(num);
-        if(from<endID)
+        int number = 0;
+        for(int id=getMaxID();id>=getMinID();id--){
+            T t = get(id);
+            if(checker.check(t)){
+                number ++ ;
+                if(number <= from) continue;
+                else{
+                    resultList.add(t);
+                    if(resultList.size()>=num) break;
+                }
+            }
+        }
+
+        /*if(from>=beginID&&size()>0)
         {
-            int index=Math.max(from, beginID);
+            int index=Math.min(from, endID-1);
             int i=index%max_size;
-            while(index!=endID&&num>0)
+            while(index>=beginID&&num>0)
             {
                 if(checker.check((T)loopArray[i]))
                 {
                     --num;
                     resultList.add((T)loopArray[i]);
                 }
-                ++i;
-                ++index;
-                if(i>=max_size)
-                    i=0;
+                --i;
+                --index;
+                if(i<0)
+                    i+=max_size;
             }
-        }
+        }*/
         return resultList;
     }
     /**

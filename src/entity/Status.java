@@ -98,6 +98,9 @@ public class Status implements IBeanResultSetCreate , ICanToJSON{
         TimeUsed = rs.getString("timeused");
         MemoryUsed = rs.getString("memoryUsed");
         codelen = rs.getInt("codelen");
+        try{
+            Code = rs.getString("code");
+        }catch (SQLException ignored){}
     }
 
     public int getCodelen(){return codelen;}
@@ -206,10 +209,19 @@ public class Status implements IBeanResultSetCreate , ICanToJSON{
 
     @Override
     public Status clone() {
-        try{
-            return (Status)super.clone();
-        }catch (CloneNotSupportedException e){
-            return null;
-        }
+        Status ret = new Status();
+        ret.user = user;
+        ret.rid = rid;
+        ret.pid = pid;
+        ret.cid = cid;
+        ret.language = language;
+        ret.Code = Code;
+        ret.codelen = codelen;
+        ret.SubmitTime = SubmitTime;
+        ret.result = result;
+        ret.score = score;
+        ret.TimeUsed = TimeUsed;
+        ret.MemoryUsed = MemoryUsed;
+        return ret;
     }
 }

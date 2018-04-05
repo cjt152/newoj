@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class statusSQL {
     private ListCatch<Status> listCatch;
-    private int MaxListCatchSize = 10000;
+    private final int MaxListCatchSize = 10000;
     /**
     * statu(id,ruser,pid,cid,lang,submitTime,result,timeUsed,memoryUsed,code)
     * ceinfo(rid,info)
@@ -32,10 +32,10 @@ public class statusSQL {
     private int maxRID;
     public void init(){
         maxRID=getNewRid();
-        List<Status> initStatus = new SQL("SELECT * FROM statu WHERE id >="+(maxRID-MaxListCatchSize)+"ORDER BY id").queryBeanList(Status.class);
+        List<Status> initStatus = new SQL("SELECT * FROM statu WHERE id >="+(maxRID-MaxListCatchSize)+" ORDER BY id").queryBeanList(Status.class);
         listCatch = new ListCatch<>(MaxListCatchSize,maxRID-MaxListCatchSize);
         int k = 0;
-        for(int i=maxRID-MaxListCatchSize;i<maxRID;i++){
+        for(int i=maxRID-MaxListCatchSize;i<=maxRID;i++){
             if(k>=initStatus.size()) {
                 listCatch.pushBack(null);
             }
@@ -125,20 +125,22 @@ public class statusSQL {
         List<Status> ret = listCatch.get(from, num, new Checker<Status>() {
             @Override
             public boolean check(Status data) {
-                if(data == null) return false;
-                boolean ret = (!all && (cid == data.getCid()));
-                if(!ret) return false;
-                if(pid!=-1){
-                    if(cid!=-1){
+                if (data == null) return false;
+                if(!all && (cid != data.getCid())){
+                    return false;
+                }
+                boolean ret = true;
+                if (pid != -1) {
+                    if (cid != -1) {
                         ret = (ContestMain.getContest(cid).getGlobalPid(pid) == data.getPid());
-                    }else{
+                    } else {
                         ret = (pid == data.getPid());
                     }
                 }
-                if(!ret) return false;
-                return     ((result != -1) && result == data.getResult().getValue())
-                        && (Language != -1 && Language == data.getLanguage())
-                        && (ssuser != null && ssuser.length() != 0 && ssuser.equals(data.getUser()));
+                return ret
+                        && !((result != -1) && result != data.getResult().getValue())
+                        && !(Language != -1 && Language != data.getLanguage())
+                        && !(ssuser != null && ssuser.length() != 0 && !ssuser.equals(data.getUser()));
             }
         });
         if(ret.size()==num){
