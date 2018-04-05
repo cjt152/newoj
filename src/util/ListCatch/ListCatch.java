@@ -94,6 +94,7 @@ public class ListCatch<T> {
     @SuppressWarnings("unchecked")
     public List<T> get(int from, int num,Checker<T> checker) {
         List<T> resultList = new ArrayList<T>(num);
+        if(from > max_size) return resultList;
         int number = 0;
         for(int id=getMaxID();id>=getMinID();id--){
             T t = get(id);
