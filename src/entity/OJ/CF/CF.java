@@ -111,7 +111,7 @@ public class CF extends OTHOJ {
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         formparams.add(new BasicNameValuePair("csrf_token",get_csrf_token(hc,1)));
         formparams.add(new BasicNameValuePair("action","enter"));
-        formparams.add(new BasicNameValuePair("handle",s.getUsername()));
+        formparams.add(new BasicNameValuePair("handleOrEmail",s.getUsername()));
         formparams.add(new BasicNameValuePair("password",s.getPassword()));
         formparams.add(new BasicNameValuePair("remember","1"));
         formparams.add(new BasicNameValuePair("_tta","451"));
