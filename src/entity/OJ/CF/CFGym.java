@@ -92,7 +92,7 @@ public class CFGym extends CF {
         formparams.add(new BasicNameValuePair("action", "submitSolutionFormSubmitted"));
         formparams.add(new BasicNameValuePair("submittedProblemIndex", pid2));
         formparams.add(new BasicNameValuePair("programTypeId", getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
-        formparams.add(new BasicNameValuePair("source", s.getSubmitInfo().code + getRandomCode()));
+        formparams.add(new BasicNameValuePair("source", s.getSubmitInfo().code + getRandomCode(getLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid))));
         if (hc.Post(URL + "/gym/" + pid1 + "/submit?csrf_token=" + csrf_token, formparams) != null) return "success";
         return "error";
     }
