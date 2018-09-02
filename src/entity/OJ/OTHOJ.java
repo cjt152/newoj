@@ -106,4 +106,13 @@ public abstract class OTHOJ {
         }
         return 0;
     }
+    public CodeLanguage getLanguage(int i,String pid){
+        List<Pair<Integer,CodeLanguage>> languageList = getLanguageList(pid);
+        for(Pair<Integer,CodeLanguage> pair : languageList){
+            if(pair.getValue().getId() == i){
+                return pair.getValue();
+            }
+        }
+        return CodeLanguage.GPP11;
+    }
 }

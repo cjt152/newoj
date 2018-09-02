@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static entity.OJ.CodeLanguage.PYTHON3;
+
 /**
  * Created by Syiml on 2015/10/9 0009.
  */
@@ -37,10 +39,12 @@ public class CF extends OTHOJ {
             return "error";
         }
         Element e=doc.select(".status-frame-datatable tr").get(1);
-        if(e.select(".view-source").size()==0){
-            return "error";
+        if(e!=null)
+        {
+            Element cell = e.select("td").get(0);
+            return cell.child(0).text();
         }
-        return e.select(".view-source").get(0).text();
+        return "error";
     }
 
     @Override
@@ -124,8 +128,23 @@ public class CF extends OTHOJ {
      * 由于CF会判断本次代码是否重复提交，因此添加一段时间的注释
      * @return 返回一段注释代码，里面包含了当前时间
      */
-    String getRandomCode(){
-        return "/*"+ Tool.now()+"*/";
+    String getRandomCode(CodeLanguage language){
+        switch (language){
+            case PYTHON3:
+                return "#" + Tool.now();
+            case PASCAL:
+            case GPP:
+            case GPP11:
+            case CSHARP:
+            case GO1_8:
+            case JAVA:
+            case JS:
+                return "//" + Tool.now();
+            case GCC:
+            case GCC11:
+            default:
+                return "/*"+ Tool.now()+"*/";
+        }
     }
     @Override
     public String submit(VjSubmitter s) {
@@ -139,7 +158,7 @@ public class CF extends OTHOJ {
         formparams.add(new BasicNameValuePair("action","submitSolutionFormSubmitted"));
         formparams.add(new BasicNameValuePair("submittedProblemCode",s.getSubmitInfo().pid));
         formparams.add(new BasicNameValuePair("programTypeId",getTrueLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid)+""));
-        formparams.add(new BasicNameValuePair("source",s.getSubmitInfo().code+ getRandomCode()));
+        formparams.add(new BasicNameValuePair("source",s.getSubmitInfo().code+ getRandomCode(getLanguage(s.getSubmitInfo().language,s.getSubmitInfo().pid))));
         if(hc.Post(URL+"/problemset/submit?csrf_token="+csrf_token, formparams)!=null) return "success";
         return "error";
     }
@@ -210,7 +229,7 @@ public class CF extends OTHOJ {
         languageList.add(new Pair<>(9,CodeLanguage.CSHARP));
         languageList.add(new Pair<>(32,CodeLanguage.GO1_8));
         languageList.add(new Pair<>(36,CodeLanguage.JAVA));
-        languageList.add(new Pair<>(31,CodeLanguage.PYTHON3));
+        languageList.add(new Pair<>(31, PYTHON3));
         languageList.add(new Pair<>(34,CodeLanguage.JS));
     }
     @Override
