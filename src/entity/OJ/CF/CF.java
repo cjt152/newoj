@@ -42,7 +42,7 @@ public class CF extends OTHOJ {
         if(e!=null)
         {
             Element cell = e.select("td").get(0);
-            return cell.child(0).text();
+            return cell.text();
         }
         return "error";
     }

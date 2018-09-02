@@ -113,6 +113,7 @@ public class VjSubmitter implements Runnable{
                 }
                 prid = oj.getRid(username,this);//获得原来的rid
                 //Tool.log("prdid = " + prid);
+                Tool.sleep(1000);
                 setShowstatus("第"+z+"次获取的原rid="+prid);
             }while(prid.equals("error"));
             setShowstatus("第"+z+"次获取的原rid="+prid+",开始提交");
