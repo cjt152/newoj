@@ -220,16 +220,16 @@ public class CF extends OTHOJ {
     private static List<Pair<Integer,CodeLanguage>> languageList;
     static{
         languageList = new ArrayList<>();
-        languageList.add(new Pair<>(1,CodeLanguage.GPP));
+//        languageList.add(new Pair<>(1,CodeLanguage.GPP));
         languageList.add(new Pair<>(42,CodeLanguage.GPP11));
-        languageList.add(new Pair<>(10,CodeLanguage.GCC));
+//        languageList.add(new Pair<>(10,CodeLanguage.GCC));
         languageList.add(new Pair<>(43,CodeLanguage.GCC11));
         //languageList.add(new Pair<>(2,CodeLanguage.VCPP));
         languageList.add(new Pair<>(4,CodeLanguage.PASCAL));
         languageList.add(new Pair<>(9,CodeLanguage.CSHARP));
         languageList.add(new Pair<>(32,CodeLanguage.GO1_8));
         languageList.add(new Pair<>(36,CodeLanguage.JAVA));
-        languageList.add(new Pair<>(31, PYTHON3));
+        languageList.add(new Pair<>(31,CodeLanguage.PYTHON3));
         languageList.add(new Pair<>(34,CodeLanguage.JS));
     }
     @Override

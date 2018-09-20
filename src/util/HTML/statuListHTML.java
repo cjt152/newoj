@@ -294,10 +294,16 @@ public class statuListHTML extends pageBean {
         select f4=new select("lang","语言");
         f4.setType(1);
         f4.add(-1, "All");
-        f4.add(0,"G++");
-        f4.add(1,"GCC");
-        f4.add(2,"JAVA");
-        f4.add(3,"Python");
+
+        for(CodeLanguage lang : CodeLanguage.values()){
+            f4.add(lang.getId(),lang.getShow());
+        }
+
+//        f4.add(0,"G++");
+//        f4.add(1,"GCC");
+//        f4.add(2,"JAVA");
+//        f4.add(3,"Python");
+
         f4.setId("lang");
         f4.setValue(Language+"");
         f.addForm(f4);

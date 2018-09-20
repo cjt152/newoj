@@ -31,11 +31,11 @@ import java.util.Map;
  */
 public class BNUOJ extends OTHOJ {
     private static String URL= Main.GV.getJSONObject("bnuoj").getString("URL");
-    private static String submitURL="/v3/ajax/problem_submit.php";
-    private static String problemURL="/v3/problem_show.php";
+    private static String submitURL="//ajax/problem_submit.php";//ajax/problem_submit.php
+    private static String problemURL="//problem_show.php";
     private static String TitleSelect="h2";
     private static String DesSelect=".content-wrapper";
-    private static String loginURL="/v3/ajax/login.php";
+    private static String loginURL="//ajax/login.php";
     private static MyClient hc = MyClient.getMyClient();
 
     private static Map<String,Result> resultMap;

@@ -4,6 +4,7 @@ import dao.AiSQL;
 import dao.GroupDao;
 import entity.*;
 import entity.Enmu.UserStarType;
+import entity.OJ.CodeLanguage;
 import entity.UserGroup.Group;
 import entity.UserGroup.GroupMemberStatus;
 import entity.UserGroup.GroupType;
@@ -157,9 +158,37 @@ public class HTML {
     }
     public static String code(String code,boolean replace,int lang){
         String language="";
-        if(lang==2) language="java";
-        else if(lang==1||lang==0) language="cpp";
-        else if(lang==3) language = "Python";
+        CodeLanguage l = CodeLanguage.getByID(lang);
+        if(l != null){
+            switch (l)
+            {
+                case GPP:
+                case GCC:
+                case GPP11:
+                case GCC11:
+                case VCPP:
+                    language = "cpp";
+                    break;
+                case JAVA:
+                    language = "java";
+                    break;
+                case PYTHON3:
+                    language = "Python";
+                    break;
+                case CSHARP:
+                    language = "csharp";
+                    break;
+                case GO1_8:
+                    language = "go";
+                    break;
+                case JS:
+                    language = "javascript";
+                    break;
+                case PASCAL:
+                    language = "";
+                    break;
+            }
+        }
         if(replace){
             code=code.replaceAll("&","&amp;");
             code=code.replaceAll("\"","&quot;");
