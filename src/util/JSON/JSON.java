@@ -207,6 +207,25 @@ public class JSON {
                 acProblems.add(list.get(i).pid);
             }
         }
+        int max_point = 1000;
+        if(acHistoryData.size() > max_point)
+        {
+            JSONArray trueData = new JSONArray();
+            int m = acHistoryData.size() - max_point;
+            k = 0;
+            int z = 1;
+            for(int i = 0 ;i < acHistoryData.size();i++)
+            {
+                k++;
+                if (k ==  acHistoryData.size()*z / (m+1)) {
+                    z ++;
+                    if(k!=1)
+                        continue;
+                }
+                trueData.add(acHistoryData.get(i));
+            }
+            return trueData.toString();
+        }
         return acHistoryData.toString();
     }
 
