@@ -6,6 +6,7 @@ import dao.*;
 import entity.*;
 import entity.OJ.OTHOJ;
 import servise.GvMain;
+import servise.StatusService.StatusService;
 import util.CodeCompare.cplusplus.CPlusPlusCompare;
 import util.Config.Config;
 import util.Config.TopConfig;
@@ -42,6 +43,8 @@ public class Main {
     public static Map<Integer,Set<MatchWebSocket>> sockets=new HashMap<>();
     public static SQLUpdateThread sqlUpdateThread = new SQLUpdateThread();
 
+    public static StatusService statusService = new StatusService();
+
     public static void Init(){
         config.init();
         try {
@@ -51,6 +54,7 @@ public class Main {
         }
         status.init();
         new Thread(sqlUpdateThread).start();
+        statusService.init();
     }
     public static String addProblem(addproblem1 action){
         Problem p = new Problem();

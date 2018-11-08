@@ -126,6 +126,24 @@ public class UserSQL extends BaseCacheLRU<String,User> {
         ts.setOrder(ts.getOrder());
         return ts;
     }
+    public Map<Integer,Integer> getAcProblem(String username){
+        Map<Integer,Integer> map = new HashMap<>();
+
+        SQL sql = new SQL("SELECT pid,count(*) as number FROM statu WHERE result=? AND ruser=? group by pid",Result.AC.getValue(),username);
+        ResultSet rs=sql.query();
+        try {
+            while(rs.next()){
+                int pid = rs.getInt("pid");
+                int number = rs.getInt("number");
+                map.put(pid,number);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            sql.close();
+        }
+        return map;
+    }
     public void addTitle(String username,int id,int jd,Timestamp endTime){
         new SQL("REPLACE INTO t_title VALUES(?,?,?,?)",username,id,jd,endTime).update();
     }
@@ -509,6 +527,10 @@ public class UserSQL extends BaseCacheLRU<String,User> {
     }
     public void updateUserAcnum(String username){
         new SQL("UPDATE users SET acnum = (select sum(t_usersolve.status) from t_usersolve where t_usersolve.username=?) where username=?",username,username).update();
+        remove_catch(username);
+    }
+    public void updateUserAcnum(String username,int number){
+        new SQL("UPDATE users SET acnum = ? where username=?",number,username).update();
         remove_catch(username);
     }
     public void updateAllUserAcnum(){

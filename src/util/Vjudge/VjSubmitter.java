@@ -1,6 +1,7 @@
 package util.Vjudge;
 
 import entity.Status;
+import servise.StatusService.StatusChgEvent;
 import util.HTML.HTML;
 import util.Main;
 import entity.OJ.OTHOJ;
@@ -81,7 +82,14 @@ public class VjSubmitter implements Runnable{
                 //System.out.println(submitterID+"IDLE");
                 this.info=vj.queue.get(ojid).take();
                 this.status=BUSY;
-                Main.status.setStatusResult(info.rid,Result.JUDGING,"-","-","");
+                StatusChgEvent event = new StatusChgEvent();
+                event.rid = info.rid;
+                event.res =  Result.JUDGING;
+                event.time = "-";
+                event.memory = "-";
+                event.CEInfo = "";
+                Main.statusService.AddEvent(Main.status.getStatu(info.rid).getUser(),event);
+                //Main.status.setStatusResult(info.rid,Result.JUDGING,"-","-","");
                 go();
                 ojsrid="->"+ojsrid;
                 this.status=IDLE;
@@ -106,7 +114,14 @@ public class VjSubmitter implements Runnable{
                 z++;
                 if(z>=10){
                     //System.out.println(submitterID+":getPrid Error");
-                    Main.status.setStatusResult(info.rid, Result.ERROR, "-", "-", "ERROR:获取原rid失败。可能是连接不上原oj导致的错误");
+                    StatusChgEvent event = new StatusChgEvent();
+                    event.rid = info.rid;
+                    event.res =  Result.ERROR;
+                    event.time = "-";
+                    event.memory = "-";
+                    event.CEInfo = "ERROR:获取原rid失败。可能是连接不上原oj导致的错误";
+                    Main.statusService.AddEvent(Main.status.getStatu(info.rid).getUser(),event);
+                    //Main.status.setStatusResult(info.rid, Result.ERROR, "-", "-", "ERROR:获取原rid失败。可能是连接不上原oj导致的错误");
                     this.status=IDLE;
                     setShowstatus("获取原rid出错");
                     return;
@@ -126,7 +141,14 @@ public class VjSubmitter implements Runnable{
                     num++;
                     if (num >= 10) {
                         //System.out.println(submitterID+":doSubmit out time");
-                        Main.status.setStatusResult(info.rid, Result.ERROR, "-", "-", "ERROR:提交失败。可能是连接不上原oj导致的错误");
+                        StatusChgEvent event = new StatusChgEvent();
+                        event.rid = info.rid;
+                        event.res =  Result.ERROR;
+                        event.time = "-";
+                        event.memory = "-";
+                        event.CEInfo = "ERROR:提交失败。可能是连接不上原oj导致的错误";
+                        Main.statusService.AddEvent(Main.status.getStatu(info.rid).getUser(),event);
+                        //Main.status.setStatusResult(info.rid, Result.ERROR, "-", "-", "ERROR:提交失败。可能是连接不上原oj导致的错误");
                         this.status=IDLE;
                         setShowstatus("第"+num+"次的提交出错，评测出错");
                         return;
@@ -148,22 +170,42 @@ public class VjSubmitter implements Runnable{
                 k--;
             }while(num==5&&k!=0);
             if(k==0){
-                Main.status.setStatusResult(info.rid, Result.ERROR, "-", "-", "ERROR:提交失败。提交时错误，检查64位整数格式是否正确");
+                StatusChgEvent event = new StatusChgEvent();
+                event.rid = info.rid;
+                event.res =  Result.ERROR;
+                event.time = "-";
+                event.memory = "-";
+                event.CEInfo = "ERROR:提交失败。提交时错误，检查64位整数格式是否正确";
+                Main.statusService.AddEvent(Main.status.getStatu(info.rid).getUser(),event);
+                //Main.status.setStatusResult(info.rid, Result.ERROR, "-", "-", "ERROR:提交失败。提交时错误，检查64位整数格式是否正确");
                 setShowstatus("提交失败");
             }else{
                 ojsrid = nrid;
                 r = oj.getResultReturn(this);
                 if(r != null){
-                    Status s = Main.status.setStatusResult(info.rid, r.getR(),r.getTime(),r.getMemory(),r.getCEInfo(),r.getScore());
-                    if(r.getR() != Result.ERROR)
-                        Main.submitter.onSubmitDone(s);
+                    StatusChgEvent event = new StatusChgEvent();
+                    event.rid = info.rid;
+                    event.res =  r.getR();
+                    event.time = r.getTime();
+                    event.memory = r.getMemory();
+                    event.CEInfo = r.getCEInfo();
+                    event.score = r.getScore();
+                    Main.statusService.AddEvent(Main.status.getStatu(info.rid).getUser(),event);
+                    //Status s = Main.status.setStatusResult(info.rid, r.getR(),r.getTime(),r.getMemory(),r.getCEInfo(),r.getScore());
                 }
             }
             this.status=IDLE;
         }catch(Exception e){
             setShowstatus("未知错误");
             Tool.log(e);
-            Main.status.setStatusResult(info.rid, Result.ERROR, "-", "-", "");
+            StatusChgEvent event = new StatusChgEvent();
+            event.rid = info.rid;
+            event.res =  Result.ERROR;
+            event.time = "-";
+            event.memory = "-";
+            event.CEInfo = null;
+            Main.statusService.AddEvent(Main.status.getStatu(info.rid).getUser(),event);
+            //Main.status.setStatusResult(info.rid, Result.ERROR, "-", "-", "");
             this.status=IDLE;
         }
     }

@@ -24,7 +24,10 @@ public class TaskUpdateAllUserRank extends MyTimer {
 
     @Override
     public void getTimer() throws Exception {
+        setEveryDay(5,30,0);
+        new Timer().scheduleAtFixedRate(this, date, period);
+
         //每5分钟更新一次
-        new Timer().scheduleAtFixedRate(this, 5 * MyTime.MINUTE, 5 * MyTime.MINUTE);
+        //new Timer().scheduleAtFixedRate(this, 5 * MyTime.MINUTE, 5 * MyTime.MINUTE);
     }
 }

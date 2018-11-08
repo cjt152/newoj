@@ -16,7 +16,7 @@ public class EventDealOnStatusChange extends EventDeal<EventStatusChange> {
 
     @Override
     public void dealEvent(EventStatusChange event) {
-        Main.status.onStatusChange(event.ps,event.s);
+        //Main.status.onStatusChange(event.ps,event.s);
         OneProblemEveryDay.onUserAcProblem(event.ps,event.s);
     }
 

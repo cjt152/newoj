@@ -250,19 +250,13 @@ public class statusSQL {
         sql.append(" ORDER BY id DESC");
         return new SQL(sql.toString(),cid).queryNum();
     }
-    public Status setStatusResult (int rid, Result res, String time, String Meory, String CEinfo){
-        return setStatusResult(rid,res,time,Meory,CEinfo,-1);
-    }
     public synchronized Status setStatusResult (int rid, Result res, String time, String Meory, String CEinfo,int score){
         Status ps = getStatu(rid);
-        Status clone = ps.clone();
         ps.setStatusResult(res,time,Meory);
         ps.setScore(score);
         new SQL("update statu set result=?,timeUsed=?,memoryUsed=?,score=? where id=?", Status.resultToInt(res),time,Meory,score,rid).update();
         Tool.log(rid+"->"+res);
         Status s=getStatu(rid);
-        EventMain.triggerEvent(new EventStatusChange(clone,s));
-        EventMain.triggerEvent(new EventJudge(Main.users.getUser(s.getUser()),s));
         if(s.getCid()!=-1&&res!=Result.JUDGING){
             Contest c=ContestMain.getContest(s.getCid());
             c.setDoRankHtml(true);
@@ -291,14 +285,12 @@ public class statusSQL {
         }else{
             Main.problems.updateProblemTotals(s.getPid(), p.totalSubmit, p.totalSubmitUser, p.totalAc + chg, p.totalAcUser + chg);
         }
+
         new SQL("REPLACE INTO t_usersolve VALUES(?,?,(SELECT MAX(result=1) FROM statu WHERE ruser=? AND pid=? GROUP BY ruser))",
                 s.getUser(),
                 s.getPid(),
                 s.getUser(),
                 s.getPid()).update();
-        Main.users.updateUserAcnum(s.getUser());
-        //此时标记下次要更新用户排名
-        TaskUpdateAllUserRank.nextUpdateTime = MyTime.addTimestamp(Tool.now(),MyTime.MINUTE*5);
     }
     public void onStatusAdd(Status s){
         Problem p = Main.problems.getProblem(s.getPid());

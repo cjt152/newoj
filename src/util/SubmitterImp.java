@@ -6,6 +6,7 @@ import entity.Problem;
 import entity.Result;
 import entity.Status;
 import servise.ContestMain;
+import servise.StatusService.StatusChgEvent;
 import util.Event.EventMain;
 import util.Event.Events.EventStatusAdd;
 import util.Vjudge.SubmitInfo;
@@ -62,7 +63,7 @@ public class SubmitterImp implements Submitter{
             int ppid=c.getcpid(s.getPid());
             if(s.getResult()== Result.AC){
                 MatchServer.sendStatus(s.getCid(),s.getRid(),ppid,s.getUser(),1,(s.getSbmitTime().getTime()-c.getBeginDate().getTime())/1000);
-            }else{
+            }else if(s.getResult() != Result.ERROR){
                 MatchServer.sendStatus(s.getCid(),s.getRid(),ppid,s.getUser(),0,(s.getSbmitTime().getTime()-c.getBeginDate().getTime())/1000);
             }
         }
@@ -73,12 +74,27 @@ public class SubmitterImp implements Submitter{
         Status s=Main.status.getStatu(rid);
         int pid=s.getPid();
         if(!Main.problems.isProblemLocal(pid)){//is vj
-            Main.status.setStatusResult(rid, Result.PENDING,"-","-",null);
+            StatusChgEvent event = new StatusChgEvent();
+            event.rid = rid;
+            event.res =  Result.PENDING;
+            event.time = "-";
+            event.memory = "-";
+            event.CEInfo = null;
+            Main.statusService.AddEvent(s.getUser(),event);
+
             SubmitInfo ss=new SubmitInfo(rid,Main.problems.getOjspid(pid),s.getLanguage(),s.getCode(),true);
             submitVJ(ss, Main.problems.getOJid(pid));
             return 0;//success submit to vj
         }else{//is local
-            Main.status.setStatusResult(rid, Result.PENDING,"-","-",null);
+            StatusChgEvent event = new StatusChgEvent();
+            event.rid = rid;
+            event.res =  Result.PENDING;
+            event.time = "-";
+            event.memory = "-";
+            event.CEInfo = null;
+            Main.statusService.AddEvent(s.getUser(),event);
+            //Main.status.setStatusResult(rid, Result.PENDING,"-","-",null);
+
             SubmitInfo ss=new SubmitInfo(rid,pid+"",s.getLanguage(),s.getCode(),true);
             m.addSubmit(ss);
             return 1;//success submit to local

@@ -10,6 +10,7 @@ import util.Tool;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2015/6/3.
@@ -50,6 +51,7 @@ public class User implements IBeanResultSetCreate, IBeanCanCatch,ICanToJSON{
     private Timestamp catch_time;
     public TitleSet titleSet = null;
     public Timestamp autoClockInTime = null;
+    private Map<Integer,Integer> acProblem = null; //每道题的AC次数
     public User(){}
 
     public User(register r){
@@ -482,5 +484,15 @@ public class User implements IBeanResultSetCreate, IBeanCanCatch,ICanToJSON{
         if(gender == 1) return "男";
         else if(gender == 2) return "女";
         else return "未选择";
+    }
+
+    synchronized public Map<Integer,Integer> getAcProblem()
+    {
+        if(acProblem == null)
+        {
+            acProblem = Main.users.getAcProblem(username);
+            acnum = acProblem.size();
+        }
+        return acProblem;
     }
 }

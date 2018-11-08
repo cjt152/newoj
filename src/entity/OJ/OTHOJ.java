@@ -1,13 +1,13 @@
 package entity.OJ;
 
 import entity.Result;
+import servise.StatusService.StatusChgEvent;
 import util.Main;
 import util.Pair;
 import util.Tool;
 import util.Vjudge.VjSubmitter;
 import entity.RES;
 import util.HTML.problemHTML;
-import util.Submitter;
 
 import java.util.List;
 
@@ -88,7 +88,14 @@ public abstract class OTHOJ {
             //System.out.println(submitterID+":get res="+r.getR());
             s.setShowstatus("评测结果="+r.getR());
             if(i>=300){
-                Main.status.setStatusResult(s.getSubmitInfo().rid, Result.ERROR, "-", "-", "ERROR:评测超时。可能是原oj繁忙");
+                StatusChgEvent event = new StatusChgEvent();
+                event.rid = s.getSubmitInfo().rid;
+                event.res = Result.ERROR;
+                event.time = "-";
+                event.memory = "-";
+                event.CEInfo = "ERROR:评测超时。可能是原oj繁忙";
+                Main.statusService.AddEvent(s.getUsername(),event);
+                //Main.status.setStatusResult(s.getSubmitInfo().rid, Result.ERROR, "-", "-", "ERROR:评测超时。可能是原oj繁忙");
                 break;
             }
         }while(!r.canReturn());

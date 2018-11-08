@@ -1,5 +1,6 @@
 package util.Vjudge;
 
+import servise.StatusService.StatusChgEvent;
 import util.Main;
 import entity.OJ.LocalJudge.LocalJudge;
 import entity.RES;
@@ -20,7 +21,15 @@ public class SubmitterLocal extends VjSubmitter {
 //        Tool.debug("==2==");
         RES res= LocalJudge.judge(this);
 //        Tool.debug("==3==");
-        Main.submitter.onSubmitDone(Main.status.setStatusResult(info.rid,res.getR(),res.getTime(),res.getMemory(),res.getCEInfo()));
+        StatusChgEvent event = new StatusChgEvent();
+        event.rid = info.rid;
+        event.res =  res.getR();
+        event.time = res.getTime();
+        event.memory = res.getMemory();
+        event.CEInfo = res.getCEInfo();
+        Main.statusService.AddEvent(Main.status.getStatu(info.rid).getUser(),event);
+        //Main.status.setStatusResult(info.rid,res.getR(),res.getTime(),res.getMemory(),res.getCEInfo());
+        //Main.submitter.onSubmitDone();//TODO ??
     }
     public void run(){//开始执行线程
         while(true){
@@ -28,7 +37,16 @@ public class SubmitterLocal extends VjSubmitter {
                 //读取队列执行
                 //System.out.println(submitterID+"IDLE");
                 this.info=vj.localQueue.take();
-                Main.status.setStatusResult(info.rid,Result.JUDGING,"-","-","");
+
+                StatusChgEvent event = new StatusChgEvent();
+                event.rid = info.rid;
+                event.res =  Result.JUDGING;
+                event.time = "-";
+                event.memory = "-";
+                event.CEInfo = null;
+                Main.statusService.AddEvent(Main.status.getStatu(info.rid).getUser(),event);
+                //Main.status.setStatusResult(info.rid,Result.JUDGING,"-","-","");
+
                 this.status=BUSY;
                 go();
             } catch (Exception e){
