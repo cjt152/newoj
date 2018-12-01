@@ -72,7 +72,7 @@ public class UserSQL extends BaseCacheLRU<String,User> {
                 , HTML.HTMLtoString(u.getMark())
                 , -100000
                 , 0,0,"","","","","","",0,0,0,1000000,null).update();
-        new SQL("UPDATE users SET rank=(select rank+1 FROM v_user WHERE username=?) WHERE username=?",u.getUsername(),u.getUsername()).update();
+        //new SQL("UPDATE users SET rank=(select rank+1 FROM v_user WHERE username=?) WHERE username=?",u.getUsername(),u.getUsername()).update();
         MessageMain.addMessageWelcome(u);
         return 1;
     }

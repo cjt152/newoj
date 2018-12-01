@@ -119,7 +119,12 @@ public class UserListHTML extends pageBean {
     public String getCellByHead(int i, String colname) {
         User s=list.get(i);
         if(colname.equals("rank")){
-            return s.getRank()+"";
+            int rank = s.getRank();
+            if(rank >= 1000000){
+                return "-";
+            }else{
+                return s.getRank()+"";
+            }
         }
         if(colname.equals("username")){
             addClass(i+1,3,"break");

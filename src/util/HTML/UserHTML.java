@@ -61,24 +61,29 @@ public class UserHTML {
         if(showuser.getSchool().length()>0) r+="来自"+HTML.text(showuser.getSchool(),5)+"。";
         r+="<br>";
         if(showuser.getRatingnum()==0){
-            r+="截止目前尚未参加过积分赛，";
+            r+="截止目前尚未参加过积分赛";
         }else{
             r+="截止目前共参加了"+HTML.text(showuser.getRatingnum()+"",6) + "场积分赛，";
             if(showuser.getShowRating()>=1300){
-                r+="当前rating达到" +HTML.text(User.ratingToHTML(showuser.getShowRating()),8) + "了，";
+                r+="当前rating达到" +HTML.text(User.ratingToHTML(showuser.getShowRating()),8) + "了";
                 if(showuser.getShowRating()<1500) r+="";
-                else if(showuser.getShowRating()<1600) r+="棒棒哒，";
-                else if(showuser.getShowRating()<1700) r+="非常厉害，";
-                else if(showuser.getShowRating()<1900) r+="好牛逼的，";
-                else if(showuser.getShowRating()<2000) r+="已经出神入化，";
-                else if(showuser.getShowRating()<2300) r+="快来膜拜巨巨，";
-                else if(showuser.getShowRating()<2600) r+="这已经超神了，";
-                else r+="我从未见过有如此厉害之人，";
+                else if(showuser.getShowRating()<1600) r+="棒棒哒";
+                else if(showuser.getShowRating()<1700) r+="非常厉害";
+                else if(showuser.getShowRating()<1900) r+="好牛逼的";
+                else if(showuser.getShowRating()<2000) r+="已经出神入化";
+                else if(showuser.getShowRating()<2300) r+="快来膜拜巨巨";
+                else if(showuser.getShowRating()<2600) r+="这已经超神了";
+                else r+="我从未见过有如此厉害之人";
             }else{
-                r+="rating是"+HTML.text(User.ratingToHTML(showuser.getShowRating()),8)+"，";
+                r+="rating是"+HTML.text(User.ratingToHTML(showuser.getShowRating()),8);
             }
         }
-        r+="在所有人中排名第" + HTML.text(showuser.getRank()+"",8) + "。<br>";
+        if(showuser.getRank() >= 1000000)
+        {
+            r+= "<br>";
+        }else{
+            r+="，在所有人中排名第" + HTML.text(showuser.getRank()+"",8) + "。<br>";
+        }
         //int acnum = Main.status.getAcNum(showuser.getUsername());
         int acnum = showuser.getAcnum();
         if(acnum!=0){
