@@ -2,6 +2,7 @@ package servise.StatusService;
 
 import entity.User;
 import util.Main;
+import util.Tool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +29,18 @@ class EveryThread implements Runnable{
     public void run() {
         while(true)
         {
-            UserEvent event = null;
-            try {
-                event = queue.take();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            try{
+                UserEvent event = null;
+                try {
+                    event = queue.take();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(event == null) continue;
+                event.run(Main.users.getUser(event.username));
+            }catch(Exception e){
+                Tool.log(e);
             }
-            if(event == null) continue;
-            event.run(Main.users.getUser(event.username));
         }
     }
 }
