@@ -20,12 +20,19 @@ public class DiscussReply extends BaseAction{
     public int rid;//reply id
     public int rrid;//replyReply id;
 
+
+    public String Escape(String str){
+        return "<pre class='sample'>" + str.replaceAll("&","&amp;")
+                .replaceAll("\"","&quot;")
+                .replaceAll("<","&lt;")
+                .replaceAll(">","&gt;") + "</pre>";
+    }
     public String dr(){
         try{
             User u=Main.loginUser();
             //Tool.log(u.getUsername()+"回复了id为"+id+"的帖子");
             MessageMain.discussAt(id,text,true);
-            return DiscussSQL.reply(u,id,text);
+            return DiscussSQL.reply(u,id,Escape(text));
         }catch(NumberFormatException e){
             return "error";
         }
@@ -42,7 +49,7 @@ public class DiscussReply extends BaseAction{
             out.print("{\"ret\",\"回复太短，至少要5个字\"}");
             return NONE;
         }
-        HTML.HTMLtoString(text);
+        text = Escape(text);
         MainResult mr = DiscussMain.replyReply(this);
         setPrompt(mr.getPrompt());
         if(mr == MainResult.SUCCESS) {

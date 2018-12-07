@@ -59,6 +59,7 @@ public class textarea extends form {
             if(id!=null&&!id.equals("")) s+=" id='" +id+"'";
             if(placeholder!=null) s+=" placeholder='"+placeholder+"'";
             s+=" class='form-control'";
+            s += " style='font-family: Menlo,Monaco,Consolas,\"Courier New\",monospace;'";
             s+=" cols='"+cols+"'";
             s+=" rows='"+rows+"'";
             s+=" name='" +name+"'";
@@ -81,6 +82,7 @@ public class textarea extends form {
             if (id != null && !id.equals("")) s += " id='" + id + "'";
             if (placeholder != null) s += " placeholder='" + placeholder + "'";
             s += " class='form-control'";
+            s += " style='font-family: Menlo,Monaco,Consolas,\"Courier New\",monospace;'";
             s += " cols='" + cols + "'";
             s += " rows='" + rows + "'";
             s += " name='" + name + "'";

@@ -258,7 +258,7 @@ function _formToHTML(d,col){
         ret+="<div class='col-xs-"+col[1]+"'>";
         ret+="<textarea ";
         if(d.type=="password") ret+="type='password' ";
-        ret+="name='"+d.name+"' class='form-control' ";
+        ret+="name='"+d.name+"' class='form-control' style='font-family: Menlo,Monaco,Consolas,\"Courier New\",monospace;' ";
         if(d.rows) ret+=" rows="+ d.rows+" ";
         if(d.value) ret+=" value='"+ d.value +"' " ;
         if(d.id) ret+=" id='"+d.id+"' ";

@@ -154,9 +154,9 @@ public class addDiscuss extends BaseAction{
         showtime="";
         shownum="-1";
         //text = HTML.HTMLtoString(text);
-        if(cid!=-1){
-            text = "<pre class='sample'>"+HTML.HTMLtoString(text)+"</pre>";
-        }
+        //if(cid!=-1){
+        text = "<pre class='sample'>"+HTML.HTMLtoString(text)+"</pre>";
+        //}
         Discuss d=new Discuss(this);
         return d.goAddOrEdit();
     }
@@ -170,6 +170,7 @@ public class addDiscuss extends BaseAction{
         showauthor="";
         showtime="";
         shownum="-1";
+        text = "<pre class='sample'>"+HTML.HTMLtoString(text)+"</pre>";
         //text = HTML.HTMLtoString(text);
         Discuss d=new Discuss(this);
         //Tool.log(Main.loginUser().getUsername()+"追加了帖子【"+d.getTitle()+"】");

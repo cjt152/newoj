@@ -179,8 +179,8 @@ public class DiscussHTML {
         textarea f11 = new textarea("text","text");
 //        if(d!=null) f11.setValue(HTML.HTMLtoString(d.text));
 //        else
-        if(cid==-1) f11.setUEditor(true);
-        else f11.setUEditor(false);
+        //if(cid==-1) f11.setUEditor(true);
+        f11.setUEditor(false);
         f11.setId("addDiscuss");
         f11.setValue("");
         f11.setPlaceholder("这里输入正文");
@@ -361,7 +361,7 @@ public class DiscussHTML {
         form.addForm(t1);
         textarea t2=new textarea("text", "text");
         t2.setValue("");
-        t2.setUEditor(true);
+        t2.setUEditor(false);
         t2.setId("replyDiscuss");
         t2.setPlaceholder("输入回复内容... "+(d.isReplyHidden() ?"本帖已经设置为回复仅管理员和自己可见，可放心回复~":""));
         form.addForm(t2);
