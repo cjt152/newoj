@@ -19,17 +19,20 @@ public class SQL {
     private String sql;
     private Object[] args;
     private PreparedStatement p=null;
+    private DBConnection dbConn;
     private Connection conn;
     private boolean log=true;
     public SQL(String sql, Object... args){
         this.sql=sql;
         this.args=args;
-        conn= conns.getConn();
+        dbConn = conns.getConn();
+        conn = dbConn.conn;
     }
     public SQL(String sql, List<Object> args){
         this.sql = sql;
         this.args = args.toArray();
-        conn = conns.getConn();
+        dbConn = conns.getConn();
+        conn = dbConn.conn;
     }
     public void addArgs(Object... args){
         Object[] a3 = new Object[this.args.length + args.length];
@@ -306,7 +309,7 @@ public class SQL {
     public void close(){
         pClose();
         cClose();
-        conns.putCondition(conn);
+        conns.putCondition(dbConn);
     }
 
     private void cClose(){

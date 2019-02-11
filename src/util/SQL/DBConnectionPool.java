@@ -7,6 +7,7 @@ import util.Tool;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Timer;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -25,6 +26,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class DBConnectionPool extends MyTimer {
     public static int num=0;
+    private Timestamp lastClearTime = new Timestamp(0);
     /**
      * 连接队列
      */
@@ -49,22 +51,32 @@ public class DBConnectionPool extends MyTimer {
      * 从连接池里取出一个连接
      * @return 连接
      */
-    Connection getConn(){
-        Connection ret= Connections.poll();
+    DBConnection getConn(){
+        Connection ret = Connections.poll();
         if(ret==null){
             ret=getNew();//队列为空则直接新建一个连接
         }
-        return ret;
+        DBConnection conn = new DBConnection();
+        conn.conn = ret;
+        conn.time = lastClearTime;
+        return conn;
     }
 
     /**
      * 归还连接池
      * @param c 连接
      */
-    void putCondition(Connection c){
-        if(!Connections.offer(c)){
+    void putCondition(DBConnection c){
+        if(c.time.before(lastClearTime)){
             try {
-                c.close();
+                c.conn.close();
+                num--;
+            } catch (SQLException ignored) {}
+            return ;
+        }
+        if(!Connections.offer(c.conn)){
+            try {
+                c.conn.close();
                 num--;
             } catch (SQLException ignored) {}
         }
@@ -75,6 +87,7 @@ public class DBConnectionPool extends MyTimer {
      * MySQL需要8小时重置连接
      */
     public void clear(){
+        lastClearTime = Tool.now();
         Connection ret;
         while((ret= Connections.poll())!=null){
             try {
