@@ -138,7 +138,7 @@ public class ProblemListFilter extends ResultSetPageHtml {
     }
     @Override
     public String getPriPageLink() {
-        return "ProblemListFilter.jsp?name="+name+"&tag="+tag+"&pa="+(getNowpage()-1)+(star?"s&tar=on":"");
+        return "ProblemListFilter.jsp?name="+name+"&tag="+tag+"&pa="+(getNowpage()-1)+(star?"&star=on":"");
     }
     @Override
     public String rightForm() {
